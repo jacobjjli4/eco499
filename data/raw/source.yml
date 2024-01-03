@@ -13,3 +13,8 @@ highways.csv:
     obtained: 2023-11-12
     source: https://www.dropbox.com/s/wq5cp6gm4ocxjo4/CD-ROM.rar?dl=0
     description: "Dataset containing highway opening dates and locations (Baum-Snow)"
+
+nhgis_tl2010_counties:
+    obtained: 2023-01-02
+    source: https://data2.nhgis.org/
+    description: "TIGER/Line Shapefile for 2010 U.S. counties."
