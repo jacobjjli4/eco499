@@ -1,6 +1,7 @@
 *.DS_Store
 
 # data files
+data/raw/
 *.dta
 *.csv
 *.pdf
