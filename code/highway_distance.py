@@ -14,7 +14,23 @@ highways["to"] = [Point(point) for point in zip(highways['x2'], highways['y2'])]
 highways['line'] = highways.apply(lambda row: LineString([row['from'], row['to']]), axis=1)
 
 # used projfinder to find the CRS of the highway dataset (NAD27)
+highways_gdf.loc[(highways_gdf['x1'] < - 1950000)
+                 &(highways_gdf['x1'] > -1955000)
+                 &(highways_gdf['y1'] > 1234000)
+                 &(highways_gdf['y1'] < 1236000)].plot(aspect=1)
+highways.loc[(highways['x1'] < - 1950000)
+                 &(highways['x1'] > -1955000)
+                 &(highways['y1'] > 1234000)
+                 &(highways['y1'] < 1236000)][['x1', 'y1']]
 highways_gdf = gpd.GeoDataFrame(highways, geometry=highways['line'], crs=4267)
+
+# states for reference
+states = gpd.read_file("./data/raw/cb_2018_us_state_500k/cb_2018_us_state_500k.shp")
+# states.to_crs(4267)
+fig, ax = plt.subplots(1, 1)
+states.plot(ax=ax)
+# highways_gdf.plot(ax=ax, edgecolor='red')
+plt.show()
 
 # county dataset
 counties = gpd.read_file("./data/raw/nhgis_tl2010_counties/US_county_2010.shp")
