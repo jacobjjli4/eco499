@@ -22,7 +22,25 @@ capture mkdir "$root/data/derived/"
 save "$root/data/derived/county_outcomes_slim.dta", replace
 
 * Pool OA data at the MSA level
+* Load 1999 MSA to county crosswalk
+infix 22 first str msa 1-4 str state 25-26 str county 27-29 using "$root/data/raw/msa_crosswalk/99mfips.txt", clear
+drop if _n > 918
+drop if (msa == "")|(state == "")|(county == "")
+duplicates drop
 
+save "$root/data/derived/msa_crosswalk.dta", replace
+
+* Load 1999 New England MSA to county crosswalk
+infix 14 first str msa 1-4 str state 6-7 str county 9-11 using "$root/data/raw/msa_crosswalk/99nfips.txt", clear
+drop if _n > 54
+drop if (msa == "")|(state == "")|(county == "")
+duplicates drop
+
+append using "$root/data/derived/msa_crosswalk.dta"
+save "$root/data/derived/msa_crosswalk.dta", replace
+
+use "$root/data/derived/county_outcomes_slim.dta", clear
+merge m:1 state county using "$root/data/derived/msa_crosswalk.dta"
 
 * Load highways data
 /* From Baum-Snow, CD-ROM/programs/make-roads.do:
