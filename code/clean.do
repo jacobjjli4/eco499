@@ -15,7 +15,27 @@ global root = "/Users/jacobjjli/Library/CloudStorage/OneDrive-UniversityofToront
 local vars = "state county kfr_pooled* kfr_natam* kfr_black* kfr_asian* kfr_white* kfr_hisp*"
 use `vars' using "$root/data/raw/county_outcomes_dta.dta", clear
 
-* exploratory analysis
 keep state county kfr_pooled_pooled*
+tostring state county, replace
 
-use "$data_raw/form500.dta", clear
+capture mkdir "$root/data/derived/"
+save "$root/data/derived/county_outcomes_slim.dta", replace
+
+* Pool OA data at the MSA level
+
+
+* Load highways data
+/* From Baum-Snow, CD-ROM/programs/make-roads.do:
+Create variables that have the miles of federally funded highway 
+within each msa.  Variables created are as follows:
+lenaX - all long-distance interstates in data based on d_open
+lenbX - all short-distance interstates in data based on d_open
+lencX - all fedfunded interstates (w/ no short distance) based on d_open
+lenpX - all interstates in 1947 plan
+firaX - all long-distance interstates in data based on d_first
+firbX - all short-distance interstates in data based on d_first
+for each census year 50, 60, 70, 80, 90
+and then later for each year individually.
+*/
+use "$root/data/raw/hwy-allyr-msa.dta", clear
+keep msa year lena lenb lenc lenp 

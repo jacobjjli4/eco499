@@ -2,6 +2,7 @@
 
 # data files
 data/raw/
+data/derived/
 *.dta
 *.csv
 *.pdf
