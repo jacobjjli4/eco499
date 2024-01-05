@@ -30,15 +30,6 @@ duplicates drop
 
 save "$root/data/derived/msa_crosswalk.dta", replace
 
-* Load 1999 New England MSA to county crosswalk
-infix 14 first str msa 1-4 str state 6-7 str county 9-11 using "$root/data/raw/msa_crosswalk/99nfips.txt", clear
-drop if _n > 54
-drop if (msa == "")|(state == "")|(county == "")
-duplicates drop
-
-append using "$root/data/derived/msa_crosswalk.dta"
-save "$root/data/derived/msa_crosswalk.dta", replace
-
 use "$root/data/derived/county_outcomes_slim.dta", clear
 merge m:1 state county using "$root/data/derived/msa_crosswalk.dta"
 
