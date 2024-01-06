@@ -17,15 +17,21 @@ use `vars' using "$root/data/raw/county_outcomes_dta.dta", clear
 
 keep state county kfr_pooled_pooled*
 tostring state county, replace
+replace state = "0" + state if strlen(state) < 2
+replace county = "00" + county if strlen(county) == 1
+replace county = "0" + county if strlen(county) == 2
 
 capture mkdir "$root/data/derived/"
 save "$root/data/derived/county_outcomes_slim.dta", replace
 
 * Pool OA data at the MSA level
 * Load 1999 MSA to county crosswalk
-infix 22 first str msa 1-4 str state 25-26 str county 27-29 using "$root/data/raw/msa_crosswalk/99mfips.txt", clear
-drop if _n > 918
+infix 22 first str msa 1-4 str pmsa 9-12 str state 25-26 str county 27-29 using "$root/data/raw/msa_crosswalk/99mfips.txt", clear
+drop if _n > 2150
 drop if (msa == "")|(state == "")|(county == "")
+* CMSAs consist of PMSAs: I treat PMSAs as MSAs and do not use CMSAs in analysis
+replace msa = pmsa if pmsa != ""
+drop pmsa
 duplicates drop
 
 save "$root/data/derived/msa_crosswalk.dta", replace
