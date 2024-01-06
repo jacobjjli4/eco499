@@ -32,11 +32,14 @@ drop if (msa == "")|(state == "")|(county == "")
 * CMSAs consist of PMSAs: I treat PMSAs as MSAs and do not use CMSAs in analysis
 replace msa = pmsa if pmsa != ""
 drop pmsa
+
+* Drop all New England MSAs (I use NECMAs instead since they are county-based)
+drop if inlist(state, "23", "50", "33", "25", "44", "09")
 duplicates drop
 
 save "$root/data/derived/msa_crosswalk.dta", replace
 
-* Load 1999 New England MSA to county crosswalk
+* Load 1999 New England County MAs to county crosswalk
 infix 14 first str msa 1-4 str state 6-7 str county 9-11 using "$root/data/raw/msa_crosswalk/99nfips.txt", clear
 drop if _n > 54
 drop if (msa == "")|(state == "")|(county == "")
@@ -47,6 +50,8 @@ save "$root/data/derived/msa_crosswalk.dta", replace
 
 use "$root/data/derived/county_outcomes_slim.dta", clear
 merge m:1 state county using "$root/data/derived/msa_crosswalk.dta"
+keep if _merge==3
+* Merge explanation: Bedford city (FIPS 51515) was an independent city in VA but merged into Bedford County in 2013
 
 * Load highways data
 /* From Baum-Snow, CD-ROM/programs/make-roads.do:
