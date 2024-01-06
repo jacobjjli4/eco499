@@ -53,6 +53,9 @@ merge m:1 state county using "$root/data/derived/msa_crosswalk.dta"
 keep if _merge==3
 * Merge explanation: Bedford city (FIPS 51515) was an independent city in VA but merged into Bedford County in 2013
 
+* Collapse OA data to MSA level
+collapse (mean) kfr_pooled_pooled_mean [fw=kfr_pooled_pooled_n], by(msa)
+
 * Load highways data
 /* From Baum-Snow, CD-ROM/programs/make-roads.do:
 Create variables that have the miles of federally funded highway 
