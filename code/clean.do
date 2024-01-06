@@ -11,6 +11,14 @@ set linesize 240
 
 global root = "/Users/jacobjjli/Library/CloudStorage/OneDrive-UniversityofToronto/Documents/School/1-5 ECO499/eco499/"
 
+* Load Highways data
+use "$root/data/raw/hwy-allyr-msa.dta", clear
+keep msa year lena lenb lenc lenp
+tostring msa, replace
+replace msa = "00" + msa if strlen(msa) == 2
+replace msa = "0" + msa if strlen(msa) == 3
+save "$root/data/derived/hwy_allyr_msa_clean.dta", replace
+
 * Load OA data
 local vars = "state county kfr_pooled* kfr_natam* kfr_black* kfr_asian* kfr_white* kfr_hisp*"
 use `vars' using "$root/data/raw/county_outcomes_dta.dta", clear
@@ -50,24 +58,18 @@ save "$root/data/derived/msa_crosswalk.dta", replace
 
 use "$root/data/derived/county_outcomes_slim.dta", clear
 merge m:1 state county using "$root/data/derived/msa_crosswalk.dta"
-keep if _merge==3
 * Merge explanation: Bedford city (FIPS 51515) was an independent city in VA but merged into Bedford County in 2013
+keep if _merge==3
+drop _merge
 
 * Collapse OA data to MSA level
 collapse (mean) kfr_pooled_pooled_mean [fw=kfr_pooled_pooled_n], by(msa)
 
-* Load highways data
-/* From Baum-Snow, CD-ROM/programs/make-roads.do:
-Create variables that have the miles of federally funded highway 
-within each msa.  Variables created are as follows:
-lenaX - all long-distance interstates in data based on d_open
-lenbX - all short-distance interstates in data based on d_open
-lencX - all fedfunded interstates (w/ no short distance) based on d_open
-lenpX - all interstates in 1947 plan
-firaX - all long-distance interstates in data based on d_first
-firbX - all short-distance interstates in data based on d_first
-for each census year 50, 60, 70, 80, 90
-and then later for each year individually.
-*/
-use "$root/data/raw/hwy-allyr-msa.dta", clear
-keep msa year lena lenb lenc lenp 
+save "$root/data/derived/oa_kfr_pooled_pooled_mean.dta", replace
+
+merge 1:m msa using "$root/data/derived/hwy_allyr_msa_clean.dta"
+* _merge == 2: 4760 (Manchester NH) and 9360 (Yuma, AZ) are not merged for some reason
+drop if _merge == 2
+* _merge == 1: MSAs without highways in the Baum-Snow dataset
+drop if _merge == 1
+drop _merge
