@@ -6,3 +6,6 @@ data/derived/
 *.dta
 *.csv
 *.pdf
+
+# results
+results/

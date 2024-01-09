@@ -16,14 +16,18 @@ use "$root/data/derived/oa_kfr_pooled_pooled_mean.dta", clear
 * lena - 2 digit (main) interstate highways
 * lenb - 3 digit (auxiliary) interstate highways
 
+capture mkdir "$root/results/exploratory/"
+
 * when were interstates constructed?
 preserve
 collapse (sum) lena, by(year)
 twoway line lena year
+graph export "$root/results/exploratory/highways_per_year.png"
 restore
 
 * relationship between highway length and long-run outcomes by year?
-keep if year<60
+gen l_lena = log(lena)
 scatter kfr lena, by(year)
-
-bysort year: 
+graph export "$root/results/exploratory/scatter_kfr_lena.png"
+scatter kfr l_lena, by(year)
+graph export "$root/results/exploratory/scatter_kfr_log_lena.png"
