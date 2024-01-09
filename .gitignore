@@ -8,4 +8,4 @@ data/derived/
 *.pdf
 
 # results
-results/
+output/
