@@ -1,11 +1,12 @@
 *.DS_Store
 
 # data files
-data/raw/
+data/raw/**/*
 data/derived/
-*.dta
-*.csv
-*.pdf
+
+# allow tracking of .dvc files
+!data/raw/*.dvc
+!data/raw/**/*.dvc
 
 # results
 output/
