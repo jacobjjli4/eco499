@@ -6,6 +6,7 @@ data/derived/
 
 # allow tracking of .dvc files
 !data/raw/*.dvc
+!data/raw/**/*/
 !data/raw/**/*.dvc
 
 # results
