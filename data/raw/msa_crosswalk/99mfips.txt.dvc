@@ -1,0 +1,5 @@
+outs:
+- md5: bbac11125af263a6af1fb70745b5edbb
+  size: 141336
+  hash: md5
+  path: 99mfips.txt

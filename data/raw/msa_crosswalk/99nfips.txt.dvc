@@ -1,0 +1,5 @@
+outs:
+- md5: f00ba6ff86846e47fb3a2c46ccf8d368
+  size: 2481
+  hash: md5
+  path: 99nfips.txt
