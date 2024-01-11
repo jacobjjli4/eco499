@@ -1,14 +1,4 @@
 ---
-county_outcomes_dta.dta:
-    obtained: 2024-01-02
-    source: https://opportunityinsights.org/wp-content/uploads/2018/10/county_outcomes_dta.zip
-    description: "All county-level Opportunity Atlas outcomes (Chetty)."
-
-county_outcomes.csv:
-    obtained: 2024-01-02
-    source: https://opportunityinsights.org/wp-content/uploads/2018/10/cz_outcomes.csv
-    description: "Excel version of county-level Opportunity Atlas outcomes (Chetty)."
-
 czlma903.xls:
     obtained: 2024-01-11
     source: https://www.ers.usda.gov/data-products/commuting-zones-and-labor-market-areas/
