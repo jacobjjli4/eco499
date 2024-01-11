@@ -11,7 +11,7 @@ set linesize 240
 
 global root = "/Users/jacobjjli/Library/CloudStorage/OneDrive-UniversityofToronto/Documents/School/1-5 ECO499/eco499/"
 
-use "$root/data/derived/oa_kfr_pooled_pooled_mean.dta", clear
+use "$root/data/derived/cz_oa_kfr_pooled_pooled_mean.dta", clear
 
 * lena - 2 digit (main) interstate highways
 * lenb - 3 digit (auxiliary) interstate highways

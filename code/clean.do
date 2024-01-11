@@ -19,13 +19,14 @@ tostring statefips cntyfips, replace
 replace statefips = "0" + statefips if strlen(statefips) < 2
 replace cntyfips = "00" + cntyfips if strlen(cntyfips) == 1
 replace cntyfips = "0" + cntyfips if strlen(cntyfips) == 2
+
 * Recode data for merge with county-CZ crosswalk
 * FIPS 51129 is Norfolk County VA --> now part of Chesapeake Coutny VA FIPS 51550
 * FIPS 29193 is Genevieve County MO --> changed FIPS code to 29186
 replace cntyfips = "550" if (cntyfips=="129")&(statefips=="51")
 replace cntyfips = "186" if (cntyfips=="193")&(statefips=="29")
 
-save "$root/data/derived/hwy_allyr_msa_clean.dta", replace
+save "$root/data/derived/hwy_allyr_cnty_clean.dta", replace
 
 * Pool highways data at the CZ level
 import excel "$root/data/raw/czlma903.xls", firstrow clear
@@ -38,6 +39,10 @@ keep cntyfips statefips cz
 merge m:m cntyfips statefips using "$root/data/derived/hwy_allyr_msa_clean.dta"
 drop cntyfips statefips _merge
 
+collapse (sum) lena lenb lenc lenp, by(cz year)
+
+save "$root/data/derived/hwy_allyr_cz_clean.dta", replace
+
 * CLEAN OA DATA ****************************************************************
 local vars = "cz czname kfr_pooled* kfr_natam* kfr_black* kfr_asian* kfr_white* kfr_hisp*"
 use `vars' using "$root/data/raw/cz_outcomes.dta", clear
@@ -49,11 +54,8 @@ replace cz = "0" + cz if strlen(cz) == 4
 save "$root/data/derived/cz_outcomes.dta", replace
 
 * MERGE HIGHWAY AND OA DATA ****************************************************
-merge 1:m msa using "$root/data/derived/hwy_allyr_msa_clean.dta"
-* _merge == 2: 4760 (Manchester NH) and 9360 (Yuma, AZ) are not merged for some reason
-drop if _merge == 2
-* _merge == 1: MSAs without highways in the Baum-Snow dataset
-drop if _merge == 1
+merge 1:m cz using "$root/data/derived/hwy_allyr_cz_clean.dta"
+* _merge==3 should have 25,525 observations
 drop _merge
 
-save "$root/data/derived/oa_kfr_pooled_pooled_mean.dta", replace
+save "$root/data/derived/cz_oa_kfr_pooled_pooled_mean.dta", replace
