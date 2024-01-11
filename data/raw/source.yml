@@ -8,18 +8,3 @@ county_outcomes.csv:
     obtained: 2024-01-02
     source: https://opportunityinsights.org/wp-content/uploads/2018/10/cz_outcomes.csv
     description: "Excel version of county-level Opportunity Atlas outcomes (Chetty)."
-
-hwy-allyr-msa.dta:
-    obtained: 2023-11-12
-    source: https://www.dropbox.com/s/wq5cp6gm4ocxjo4/CD-ROM.rar?dl=0
-    description: "Dataset containing highway length by year for every MSA (Baum-Snow)."
-
-msa_crosswalk/99mfips.txt:
-    obtained: 2024-01-05
-    source: https://www2.census.gov/programs-surveys/metro-micro/geographies/reference-files/1999/historical-delineation-files/99mfips.txt
-    description: "1999 Metropolitan Statistical Area delineation files with FIPS codes."
-
-msa_crosswalk/99nfips.txt:
-    obtained: 2024-01-05
-    source: https://www2.census.gov/programs-surveys/metro-micro/geographies/reference-files/1999/historical-delineation-files/99nfips.txt
-    description: "1999 New England County Metropolitan Area delineation files with FIPS codes."
