@@ -1,5 +1,15 @@
 ---
+cz_outcomes_dta.dta:
+    obtained: 2024-01-11
+    source: https://opportunityinsights.org/wp-content/uploads/2018/10/cz_outcomes.dta
+    description: "All commuting zone-level Opportunity Atlas outcomes (Chetty)."
+
 czlma903.xls:
     obtained: 2024-01-11
     source: https://www.ers.usda.gov/data-products/commuting-zones-and-labor-market-areas/
     description: "1980 and 1990 commuting zones and labor market areas, defined by county."
+
+hwy-allyr-cnty.dta:
+    obtained: 2023-11-12
+    source: https://www.dropbox.com/s/wq5cp6gm4ocxjo4/CD-ROM.rar?dl=0
+    description: "Dataset containing highway length by year for every county (Baum-Snow)."

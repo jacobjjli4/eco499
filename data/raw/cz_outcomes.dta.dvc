@@ -1,0 +1,5 @@
+outs:
+- md5: 048d71a4c260188c422633fab63915e3
+  size: 39389222
+  hash: md5
+  path: cz_outcomes.dta
