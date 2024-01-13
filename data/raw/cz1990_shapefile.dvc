@@ -1,0 +1,6 @@
+outs:
+- md5: fbee2f436bbe1931158ef6b7aba7d315.dir
+  size: 2425852
+  nfiles: 5
+  hash: md5
+  path: cz1990_shapefile
