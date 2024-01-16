@@ -3,31 +3,33 @@ import geopandas as gpd
 import os 
 import matplotlib.pyplot as plt
 from geopy import distance
-from shapely.wkt import loads
 
 root = "/Users/jacobjjli/Library/CloudStorage/OneDrive-UniversityofToronto/Documents/School/1-5 ECO499/eco499/"
 os.chdir(root)
 
+# read highway plan
 highways = gpd.read_file("./data/raw/1947-Interstate-Highway-Plan/1947plan.shp")
 highways.crs
 highways = highways.to_crs(4326)
 highways.plot(aspect=1)
 
+# read commuting zones
 cz = gpd.read_file("./data/raw/cz1990_shapefile/cz1990.shp")
-
 cz.crs
 cz.plot()
 
+# plot highway and cz together
 fig, ax = plt.subplots(1, 1)
 cz.plot(ax=ax)
 highways.plot(ax=ax, edgecolor='red', aspect=1)
 plt.show()
 
+# break up highway into cz
 overlay = gpd.overlay(highways,cz,how="intersection")
 overlay = overlay.drop(columns = 'Shape_Leng')
 
 # calculate length of highway using Vincenty's formula
-def line_length(line):
+def line_length(myline):
     """Calculate length of a line in meters, given in geographic coordinates.
     Args:
         line: a shapely LineString object with WGS 84 coordinates
@@ -39,10 +41,9 @@ def line_length(line):
     """
     # Swap shapely (lonlat) to geopy (latlon) points
     latlon = lambda lonlat: (lonlat[1], lonlat[0])
-    total_length = sum(distance(latlon(a), latlon(b)).meters
-                       for (a, b) in pairs(line.coords))
+    total_length = sum(distance.distance(latlon(a), latlon(b)).meters
+                    for (a, b) in pairs(myline.coords))
     return round(total_length, 0)
-
 
 def pairs(lst):
     """Iterate over a list in overlapping pairs without wrap-around.
@@ -62,8 +63,19 @@ def pairs(lst):
         https://stackoverflow.com/questions/1257413/1257446#1257446
     """
     i = iter(lst)
-    prev = i.next()
+    prev = next(i)
     for item in i:
         yield prev, item
         prev = item
 
+# measure length by cz
+overlay_exploded = overlay.explode() # explode MultiLineStrings into LineStrings
+overlay_exploded = overlay_exploded.loc[~overlay_exploded.is_empty]
+overlay_exploded['length'] = overlay_exploded['geometry'].apply(line_length)
+overlay_exploded.plot()
+
+# export to CSV
+overlay_exploded = overlay_exploded[['cz', 'length']]
+overlay_exploded = overlay_exploded.reset_index(drop = True)
+
+overlay_exploded.to_csv("./data/derived/highways_cz.csv")
