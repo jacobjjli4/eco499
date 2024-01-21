@@ -71,11 +71,11 @@ def pairs(lst):
 # measure length by cz
 overlay_exploded = overlay.explode() # explode MultiLineStrings into LineStrings
 overlay_exploded = overlay_exploded.loc[~overlay_exploded.is_empty]
-overlay_exploded['length'] = overlay_exploded['geometry'].apply(line_length)
+overlay_exploded['plan1947_length'] = overlay_exploded['geometry'].apply(line_length)
 overlay_exploded.plot()
 
 # export to CSV
-overlay_exploded = overlay_exploded[['cz', 'length']]
+overlay_exploded = overlay_exploded[['cz', 'plan1947_length']]
 overlay_exploded = overlay_exploded.reset_index(drop = True)
 
-overlay_exploded.to_csv("./data/derived/highways_cz.csv")
+overlay_exploded.to_csv("./data/derived/highways_cz.csv", index=False)

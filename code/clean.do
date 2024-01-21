@@ -3,7 +3,7 @@ Title:			Clean Data for Long-Run Highway Impacts
 Author:			Jia Jun (Jacob) Li
 Contact:		li.jiajun@hotmail.com
 Date Created:	October 23, 2023
-Date Modified:	Jan 11, 2024
+Date Modified:	Jan 21, 2024
 *******************************************************************************/
 
 clear all
@@ -36,12 +36,21 @@ gen statefips = substr(cntyfips, 1, 2)
 replace cntyfips = substr(cntyfips, 3, 3)
 keep cntyfips statefips cz
 * _merge==3 captures counties without highways
-merge m:m cntyfips statefips using "$root/data/derived/hwy_allyr_msa_clean.dta"
+merge m:m cntyfips statefips using "$root/data/derived/hwy_allyr_cnty_clean.dta"
 drop cntyfips statefips _merge
 
 collapse (sum) lena lenb lenc lenp, by(cz year)
 
 save "$root/data/derived/hwy_allyr_cz_clean.dta", replace
+
+* CLEAN HIGHWAY INSTRUMENT *****************************************************
+import delimited "$root/data/derived/highways_cz.csv", clear
+tostring cz, replace
+replace cz = "00" + cz if strlen(cz) == 3
+replace cz = "0" + cz if strlen(cz) == 4
+collapse (sum) plan1947_length, by(cz)
+
+save "$root/data/derived/highways_cz_clean.dta", replace
 
 * CLEAN OA DATA ****************************************************************
 local vars = "cz czname kfr_pooled* kfr_natam* kfr_black* kfr_asian* kfr_white* kfr_hisp*"
@@ -54,8 +63,14 @@ replace cz = "0" + cz if strlen(cz) == 4
 save "$root/data/derived/cz_outcomes.dta", replace
 
 * MERGE HIGHWAY AND OA DATA ****************************************************
+* OA and observed highways: _merge==3 should have 25,525 obs (total 25,525)
 merge 1:m cz using "$root/data/derived/hwy_allyr_cz_clean.dta"
-* _merge==3 should have 25,525 observations
+drop _merge
+
+* Master and highway instruments: _merge==3 should have 22,620 obs;
+* _merge==1 should have 2,905 obs (CZs with no planned highways) (total 25,525)
+merge m:1 cz using "$root/data/derived/highways_cz_clean.dta"
+replace plan1947_length = 0 if _merge == 1
 drop _merge
 
 save "$root/data/derived/cz_oa_kfr_pooled_pooled_mean.dta", replace
