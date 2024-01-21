@@ -39,7 +39,17 @@ keep cntyfips statefips cz
 merge m:m cntyfips statefips using "$root/data/derived/hwy_allyr_cnty_clean.dta"
 drop cntyfips statefips _merge
 
+* keep labels before collapse
+foreach v of var * {
+    local l`v' : variable label `v'
+        if `"`l`v''"' == "" {
+		local l`v' "`v'"
+ 	}
+ }
 collapse (sum) lena lenb lenc lenp, by(cz year)
+foreach v of var * {
+    label var `v' `"`l`v''"'
+}
 
 save "$root/data/derived/hwy_allyr_cz_clean.dta", replace
 
