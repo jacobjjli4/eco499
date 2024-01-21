@@ -3,7 +3,7 @@ Title:			Exploratory Data Analysis for Long-Run Highway Impacts
 Author:			Jia Jun (Jacob) Li
 Contact:		li.jiajun@hotmail.com
 Date Created:	January 6, 2024
-Date Modified:	Jan 7, 2024
+Date Modified:	Jan 21, 2024
 *******************************************************************************/
 
 clear all
@@ -16,8 +16,7 @@ drop *se
 gen l_lena = log(lena)
 local pooled_gender = "kfr_*_pooled_*"
 local main_percentiles = "*p25 *p50 *p75"
-keep cz czname year lena l_lena `pooled_gender'
-keep cz czname year lena l_lena `main_percentiles'
+keep cz czname year lena l_lena plan1947_length `pooled_gender' `main_percentiles'
 
 * lena - 2 digit (main) interstate highways
 * lenb - 3 digit (auxiliary) interstate highways
@@ -56,5 +55,26 @@ foreach var of varlist kfr* {
     twoway (scatter `var' l_lena, msize(tiny)) ///
         (lfit `var' l_lena), ///
         by(year, legend(off) title("`var'"))
-    graph export "$exploratory/scatter_lfit_`var'_lena.svg", replace
+    graph export "$exploratory/scatter_lfit_`var'_l_lena.svg", replace
 }
+
+* instrument vs. observed highways
+twoway (scatter lena plan1947_length, msize(tiny)) ///
+    (lfit lena plan1947_length), ///
+    by(year, legend(off))
+
+* changes in highway length from 1950 to 2000
+keep if inlist(year, 50, 100)
+drop l_lena
+reshape wide lena, i(cz) j(year)
+gen growth50to00 = lena100 - lena50
+
+twoway (scatter growth50to00 plan1947_length, msize(tiny)) ///
+    (lfit growth50to00 plan1947_length)
+
+* how do changes in highway length affect LR outcomes?
+twoway (scatter kfr_pooled_pooled_mean growth50to00, msize(tiny)) ///
+    (lfit kfr_pooled_pooled_mean growth50to00)
+* drop outlier (Los Angeles CZ, 38300)
+twoway (scatter kfr_pooled_pooled_mean growth50to00, msize(tiny)) ///
+    (lfit kfr_pooled_pooled_mean growth50to00) if plan1947_length < 600

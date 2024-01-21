@@ -49,6 +49,8 @@ tostring cz, replace
 replace cz = "00" + cz if strlen(cz) == 3
 replace cz = "0" + cz if strlen(cz) == 4
 collapse (sum) plan1947_length, by(cz)
+* convert metres to miles
+replace plan1947_length = plan1947_length / 1609.344
 
 save "$root/data/derived/highways_cz_clean.dta", replace
 
