@@ -11,7 +11,7 @@ set linesize 240
 
 global root = "/Users/jacobjjli/Library/CloudStorage/OneDrive-UniversityofToronto/Documents/School/1-5 ECO499/eco499/"
 
-use "$root/data/derived/cz_oa_kfr_pooled_pooled_mean.dta", clear
+use "$root/data/derived/cz_oa_allyrs.dta", clear
 drop *se
 gen l_lena = log(lena)
 local pooled_gender = "kfr_*_pooled_*"
@@ -64,10 +64,6 @@ twoway (scatter lena plan1947_length, msize(tiny)) ///
     by(year, legend(off))
 
 * changes in highway length from 1950 to 2000
-keep if inlist(year, 50, 100)
-drop l_lena
-reshape wide lena, i(cz) j(year)
-gen growth50to00 = lena100 - lena50
 
 twoway (scatter growth50to00 plan1947_length, msize(tiny)) ///
     (lfit growth50to00 plan1947_length)
