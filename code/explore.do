@@ -64,13 +64,34 @@ twoway (scatter lena plan1947_length, msize(tiny)) ///
     by(year, legend(off))
 
 * changes in highway length from 1950 to 2000
+use "$root/data/derived/cz_kfr_growth50to00.dta", clear
 
+* correlation between instrument and independent
+graph drop *
 twoway (scatter growth50to00 plan1947_length, msize(tiny)) ///
-    (lfit growth50to00 plan1947_length)
+    (lfit growth50to00 plan1947_length), ///
+    name(scatter_growth_plan) legend(rows(2) size(small))
+
+* drop outlier (Los Angeles CZ, 38300)
+twoway (scatter growth50to00 plan1947_length, msize(tiny)) ///
+    (lfit growth50to00 plan1947_length)if plan1947_length < 600, ///
+    name(scatter_growth_plan_noLA) legend(rows(2) size(small))
 
 * how do changes in highway length affect LR outcomes?
 twoway (scatter kfr_pooled_pooled_mean growth50to00, msize(tiny)) ///
-    (lfit kfr_pooled_pooled_mean growth50to00)
+    (lfit kfr_pooled_pooled_mean growth50to00), ///
+    name(scatter_kfr_growth) legend(rows(2) size(small))
+
+
 * drop outlier (Los Angeles CZ, 38300)
 twoway (scatter kfr_pooled_pooled_mean growth50to00, msize(tiny)) ///
-    (lfit kfr_pooled_pooled_mean growth50to00) if plan1947_length < 600
+    (lfit kfr_pooled_pooled_mean growth50to00) if plan1947_length < 600, ///
+    name(scatter_kfr_growth_noLA) legend(rows(2) size(small))
+
+* export graphs
+graph dir
+local mygraphs = r(list)
+foreach i of local mygraphs {
+    graph export "$root/output/`i'.png", name(`i') replace
+}
+graph close
