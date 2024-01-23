@@ -3,6 +3,7 @@ cz_outcomes_dta.dta:
     obtained: 2024-01-11
     source: https://opportunityinsights.org/wp-content/uploads/2018/10/cz_outcomes.dta
     description: "All commuting zone-level Opportunity Atlas outcomes (Chetty)."
+    documentation: https://opportunityinsights.org/wp-content/uploads/2019/07/Codebook-for-Table-6.pdf
 
 czlma903.xls:
     obtained: 2024-01-11
@@ -28,3 +29,4 @@ pctile_to_dollar_cw.dta:
     obtained: 2024-01-23
     source: https://opportunityinsights.org/wp-content/uploads/2018/10/pctile_to_dollar_cw.dta
     description: "Crosswalk between income/wage percentiles and 2015 dollars"
+    documentation: https://opportunityinsights.org/wp-content/uploads/2019/07/Codebook-for-Table-8.pdf
