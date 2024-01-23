@@ -3,6 +3,7 @@ import geopandas as gpd
 import os 
 import matplotlib.pyplot as plt
 from geopy import distance
+from shapely.geometry import Polygon
 
 root = "/Users/jacobjjli/Library/CloudStorage/OneDrive-UniversityofToronto/Documents/School/1-5 ECO499/eco499/"
 os.chdir(root)
@@ -72,7 +73,17 @@ def pairs(lst):
 overlay_exploded = overlay.explode() # explode MultiLineStrings into LineStrings
 overlay_exploded = overlay_exploded.loc[~overlay_exploded.is_empty]
 overlay_exploded['plan1947_length'] = overlay_exploded['geometry'].apply(line_length)
-overlay_exploded.plot()
+
+# plot and export
+bbox = Polygon([(-130, 20), (-130, 50), (-60, 50), (-60, 20)])
+cz_plot = cz.loc[cz.geometry.within(bbox)]
+fig, ax = plt.subplots(1, 1, figsize=(12,9))
+cz_plot.plot(ax=ax, facecolor='bisque', edgecolor='tan')
+highways.plot(ax=ax, edgecolor='tab:red', aspect=1)
+ax.axis('off')
+ax.set_title('1947 Interstate Highway plan overlaid with 1990 definition commuting zones')
+plt.savefig("./output/highwayplan_cz_overlay.png")
+plt.show()
 
 # export to CSV
 overlay_exploded = overlay_exploded[['cz', 'plan1947_length']]
