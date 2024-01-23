@@ -82,7 +82,6 @@ twoway (scatter kfr_pooled_pooled_mean growth50to00, msize(tiny)) ///
     (lfit kfr_pooled_pooled_mean growth50to00), ///
     name(scatter_kfr_growth) legend(rows(2) size(small))
 
-
 * drop outlier (Los Angeles CZ, 38300)
 twoway (scatter kfr_pooled_pooled_mean growth50to00, msize(tiny)) ///
     (lfit kfr_pooled_pooled_mean growth50to00) if plan1947_length < 600, ///
