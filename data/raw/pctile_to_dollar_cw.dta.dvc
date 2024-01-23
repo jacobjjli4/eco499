@@ -1,0 +1,5 @@
+outs:
+- md5: 7d9912fcc72040af54bc3ce20c87edcb
+  size: 10287
+  hash: md5
+  path: pctile_to_dollar_cw.dta

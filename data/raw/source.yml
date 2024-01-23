@@ -23,3 +23,8 @@ cz1990_shapefile:
     obtained: 2023-01-11
     source: https://opportunityinsights.org/data/?geographic_level=101&topic=0&paper_id=0#resource-listing
     description: "Shapefile of 1990 Commuting Zones."
+
+pctile_to_dollar_cw.dta:
+    obtained: 2024-01-23
+    source: https://opportunityinsights.org/wp-content/uploads/2018/10/pctile_to_dollar_cw.dta
+    description: "Crosswalk between income/wage percentiles and 2015 dollars"
