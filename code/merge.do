@@ -35,7 +35,7 @@ drop lenb lenc lenp
 reshape wide lena, i(cz) j(year)
 gen growth50to00 = lena100 - lena50
 label variable growth50to00 "Miles of highway added 1950 to 2000"
-drop lena
+drop lena*
 order cz czname growth50to00 plan1947_length
 
 save "$root/data/derived/cz_kfr_growth50to00.dta", replace
