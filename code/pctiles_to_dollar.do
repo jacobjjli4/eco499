@@ -26,4 +26,4 @@ foreach v of varlist kfr*{
     drop percentile
 }
 
-save "$root/data/derived/cz_kfr_growth50to00_dollars.dta"
+save "$root/data/derived/cz_kfr_growth50to00_dollars.dta", replace
