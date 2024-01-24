@@ -21,9 +21,10 @@ use "$root/data/derived/cz_kfr_growth50to00.dta", clear
 foreach v of varlist kfr*{
     replace `v' = ceil(`v' * 100)
     rename `v' percentile
-    merge m:1 percentile using "$root/data/derived/pctile_to_dollars_cw_clean.dta", nogenerate
-    rename kid_hh_income `v'
-    drop percentile
+    merge m:1 percentile using "$root/data/derived/pctile_to_dollars_cw_clean.dta"
+    drop if _merge==2
+    rename kid_hh_income `v'_new
+    drop percentile _merge
 }
 
 save "$root/data/derived/cz_kfr_growth50to00_dollars.dta", replace
