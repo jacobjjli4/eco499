@@ -67,6 +67,7 @@ save "$root/data/derived/highways_cz_clean.dta", replace
 * CLEAN OA DATA ****************************************************************
 local vars = "cz czname kfr_pooled* kfr_natam* kfr_black* kfr_asian* kfr_white* kfr_hisp*"
 use `vars' using "$root/data/raw/cz_outcomes.dta", clear
+drop *_se *_n
 
 tostring cz, replace
 replace cz = "00" + cz if strlen(cz) == 3

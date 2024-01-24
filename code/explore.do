@@ -12,7 +12,6 @@ set linesize 240
 global root = "/Users/jacobjjli/Library/CloudStorage/OneDrive-UniversityofToronto/Documents/School/1-5 ECO499/eco499/"
 
 use "$root/data/derived/cz_oa_allyrs.dta", clear
-drop *se
 gen l_lena = log(lena)
 local pooled_gender = "kfr_*_pooled_*"
 local main_percentiles = "*p25 *p50 *p75"

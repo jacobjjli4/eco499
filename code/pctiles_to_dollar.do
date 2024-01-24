@@ -11,5 +11,19 @@ set linesize 240
 
 global root = "/Users/jacobjjli/Library/CloudStorage/OneDrive-UniversityofToronto/Documents/School/1-5 ECO499/eco499/"
 
-use "$root/data/raw/pctile_to_dollar_cw.dta"
+use "$root/data/raw/pctile_to_dollar_cw.dta", clear
 keep percentile kid_hh_income
+
+save "$root/data/derived/pctile_to_dollars_cw_clean.dta", replace
+
+use "$root/data/derived/cz_kfr_growth50to00.dta", clear
+
+foreach v of varlist kfr*{
+    replace `v' = ceil(`v' * 100)
+    rename `v' percentile
+    merge m:1 percentile using "$root/data/derived/pctile_to_dollars_cw_clean.dta", nogenerate
+    rename kid_hh_income `v'
+    drop percentile
+}
+
+save "$root/data/derived/cz_kfr_growth50to00_dollars.dta"
