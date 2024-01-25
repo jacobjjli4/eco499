@@ -28,14 +28,3 @@ label variable plan1947_length "miles of 1947 planned Interstate"
 order cz czname year lena lenb lenc lenp plan1947_length
 
 save "$root/data/derived/cz_kfr_allyrs.dta", replace
-
-* Generate a dataset using highway growth over time
-keep if inlist(year, 50, 100)
-drop lenb lenc lenp
-reshape wide lena, i(cz) j(year)
-gen growth50to00 = lena100 - lena50
-label variable growth50to00 "Miles of highway added 1950 to 2000"
-drop lena*
-order cz czname growth50to00 plan1947_length
-
-save "$root/data/derived/cz_kfr_growth50to00.dta", replace

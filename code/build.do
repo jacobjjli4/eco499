@@ -12,4 +12,5 @@ global root = "/Users/jacobjjli/Library/CloudStorage/OneDrive-UniversityofToront
 
 do "$root/code/clean.do"
 do "$root/code/merge.do"
+do "$root/code/highway_growth.do"
 do "$root/code/pctiles_to_dollar.do"
