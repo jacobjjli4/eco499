@@ -65,6 +65,16 @@ twoway (scatter log_kfr_pooled_pooled_mean growth50to00, msize(tiny)) ///
     (lfit log_kfr_pooled_pooled_mean growth50to00) if plan1947_length < 600, ///
     name(scatter_log_kfr_growth_noLA) legend(rows(2) size(small))
 
+* same as above but logged growth
+twoway (scatter kfr_pooled_pooled_mean log_growth50to00, msize(tiny)) ///
+    (lfit kfr_pooled_pooled_mean log_growth50to00), ///
+    name(scatter_kfr_log_growth) legend(rows(2) size(small))
+
+* same as above but log log
+twoway (scatter log_kfr_pooled_pooled_mean log_growth50to00, msize(tiny)) ///
+    (lfit log_kfr_pooled_pooled_mean log_growth50to00), ///
+    name(scatter_log_kfr_log_growth) legend(rows(2) size(small))
+
 * export graphs
 graph dir
 local mygraphs = r(list)
