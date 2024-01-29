@@ -3,7 +3,7 @@ Title:			Exploratory Data Analysis for Long-Run Highway Impacts
 Author:			Jia Jun (Jacob) Li
 Contact:		li.jiajun@hotmail.com
 Date Created:	January 6, 2024
-Date Modified:	Jan 21, 2024
+Date Modified:	Jan 29, 2024
 *******************************************************************************/
 
 clear all
@@ -29,38 +29,6 @@ collapse (sum) lena, by(year)
 twoway line lena year
 graph export "$exploratory/highways_per_year.png", replace
 restore
-
-* relationship between highway length and long-run outcomes by year?
-scatter kfr_pooled_pooled_mean lena, msize(tiny) by(year)
-graph export "$exploratory/scatter_kfr_lena.png", replace
-scatter kfr_pooled_pooled_mean l_lena, msize(tiny) by(year)
-graph export "$exploratory/scatter_kfr_log_lena.png", replace
-
-* linear fit?
-twoway (scatter kfr_pooled_pooled_mean lena, msize(tiny)) ///
-    (lfit kfr_pooled_pooled_mean lena), ///
-    by(year, legend(off) title("kfr_pooled_pooled_mean"))
-graph export "$exploratory/scatter_lfit_kfr_log_lena.svg", replace
-
-* using other measures
-foreach var of varlist kfr* {
-    twoway (scatter `var' lena, msize(tiny)) ///
-        (lfit `var' lena), ///
-        by(year, legend(off) title("`var'"))
-    graph export "$exploratory/scatter_lfit_`var'_lena.svg", replace
-}
-
-foreach var of varlist kfr* {
-    twoway (scatter `var' l_lena, msize(tiny)) ///
-        (lfit `var' l_lena), ///
-        by(year, legend(off) title("`var'"))
-    graph export "$exploratory/scatter_lfit_`var'_l_lena.svg", replace
-}
-
-* instrument vs. observed highways
-twoway (scatter lena plan1947_length, msize(tiny)) ///
-    (lfit lena plan1947_length), ///
-    by(year, legend(off))
 
 * changes in highway length from 1950 to 2000
 use "$root/data/derived/cz_kfr_growth50to00_dollars.dta", clear
