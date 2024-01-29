@@ -23,6 +23,7 @@ keep cz czname year lena l_lena plan1947_length `pooled_gender' `main_percentile
 capture mkdir "$root/output/exploratory/"
 capture mkdir "$root/output/exploratory/plan_growth/"
 capture mkdir "$root/output/exploratory/growth_outcomes/"
+capture mkdir "$root/output/exploratory/combine_by_race_gender_pctile/"
 
 * when were interstates constructed?
 preserve
@@ -103,6 +104,7 @@ graph drop *
 local xtitle: variable label growth50to80
 local ytitle: variable label kfr_pooled_pooled_mean
 local logytitle: variable label log_kfr_pooled_pooled_mean
+
 * generate binscatters
 binscatter kfr_pooled_pooled_mean growth50to80, ///
     name(binscatter_kfr_growth) xtitle(`xtitle') ytitle(`ytitle')
@@ -117,3 +119,36 @@ foreach i of local mygraphs {
     graph export "$root/output/exploratory/growth_outcomes/`i'.png", name(`i') replace
 }
 graph close
+graph drop *
+
+* generate combined graphs by race and income, by gender 
+/* local pooled_gender = "log_kfr_*_pooled_* kfr_*_pooled_*" */
+local main_percentiles = "*_p25 *_p50 *_p75 log_*_p25 log_*_p50 log_*_p75"
+/* keep cz czname growth* log_growth* plan1947_length `pooled_gender' */
+keep cz czname growth* log_growth* plan1947_length `main_percentiles'
+
+local genders "male female"
+foreach gender of local genders {
+    local graphs ""
+    foreach v of varlist log_kfr_*_`gender'_* {
+    binscatter `v' log_growth50to80, ///
+        name(g_`v', replace) xtitle("") ytitle("") title(`v')
+    local graphs "`graphs' g_`v'"
+    }
+
+    graph combine `graphs', ycommon colfirst rows(3) cols(6) iscale(.25) ///
+        l1("Log of mean child household income in 2015 dollars") b1("Highway growth 1950-1980 (miles)") ///
+        name(combine_by_race_`gender'_pctile, replace)
+}
+
+graph close
+graph display combine_by_race_male_pctile
+graph display combine_by_race_female_pctile
+
+graph export "$root/output/exploratory/combine_by_race_gender_pctile/combine_by_race_male_pctile.png", ///
+    name(combine_by_race_male_pctile) replace
+graph export "$root/output/exploratory/combine_by_race_gender_pctile/combine_by_race_female_pctile.png", ///
+    name(combine_by_race_female_pctile) replace
+    
+graph close
+graph drop *
