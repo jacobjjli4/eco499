@@ -24,6 +24,7 @@ capture mkdir "$root/output/exploratory/"
 capture mkdir "$root/output/exploratory/plan_growth/"
 capture mkdir "$root/output/exploratory/growth_outcomes/"
 capture mkdir "$root/output/exploratory/combine_by_race_gender_pctile/"
+capture mkdir "$root/output/exploratory/tables/"
 
 * when were interstates constructed?
 preserve
@@ -34,6 +35,44 @@ restore
 
 * changes in highway length from 1950 to 2000
 use "$root/data/derived/cz_kfr_growth50to00_dollars.dta", clear
+/* local pooled_gender = "log_kfr_*_pooled_* kfr_*_pooled_*" */
+local main_percentiles = "*_p25 *_p50 *_p75 log_*_p25 log_*_p50 log_*_p75"
+/* keep cz czname growth* log_growth* plan1947_length `pooled_gender' */
+keep cz czname growth* log_growth* plan1947_length `main_percentiles'
+
+* summary statistics
+estpost sum growth50to80 log_growth50to80
+eststo sum_stat_growth
+estpost sum kfr_natam*
+eststo sum_stat_natam
+estpost sum kfr_white*
+eststo sum_stat_white
+estpost sum kfr_asian*
+eststo sum_stat_asian
+estpost sum kfr_black*
+eststo sum_stat_black
+estpost sum kfr_hisp*
+eststo sum_stat_hisp
+estpost sum kfr_pooled*
+eststo sum_stat_pooled
+
+eststo dir
+foreach name in `r(names)' {
+    esttab `name' using "$root/output/exploratory/tables/`name'.tex", ///
+    booktabs cells("count mean sd") replace mtitle("`name'") nonumber
+}
+
+* boxplot of outcomes
+preserve
+foreach v of varlist kfr_*_pooled_* {
+    local race = substr("`v'", 5, 5)
+    local pctile = substr("`v'", -3, 3)
+    label variable `v' "`race' `pctile'"
+}
+graph hbox kfr_*_pooled_*, asyvars showyvars legend(off) ///
+    title("Mean child hh income in 2015 by race" "and parent income pctile")
+graph export "$root/output/exploratory/sum_stat_kfr.png", replace
+restore
 
 *** HIGHWAY GROWTH AND HIGHWAY PLAN ***
 * correlation between instrument and independent
@@ -122,10 +161,6 @@ graph close
 graph drop *
 
 * generate combined graphs by race and income, by gender 
-/* local pooled_gender = "log_kfr_*_pooled_* kfr_*_pooled_*" */
-local main_percentiles = "*_p25 *_p50 *_p75 log_*_p25 log_*_p50 log_*_p75"
-/* keep cz czname growth* log_growth* plan1947_length `pooled_gender' */
-keep cz czname growth* log_growth* plan1947_length `main_percentiles'
 
 local genders "male female"
 foreach gender of local genders {
@@ -149,6 +184,6 @@ graph export "$root/output/exploratory/combine_by_race_gender_pctile/combine_by_
     name(combine_by_race_male_pctile) replace
 graph export "$root/output/exploratory/combine_by_race_gender_pctile/combine_by_race_female_pctile.png", ///
     name(combine_by_race_female_pctile) replace
-    
+
 graph close
 graph drop *
