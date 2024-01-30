@@ -36,7 +36,7 @@ restore
 * changes in highway length from 1950 to 2000
 use "$root/data/derived/cz_kfr_growth50to00_dollars.dta", clear
 /* local pooled_gender = "log_kfr_*_pooled_* kfr_*_pooled_*" */
-local main_percentiles = "*_p25 *_p50 *_p75 log_*_p25 log_*_p50 log_*_p75"
+local main_percentiles = "*_p25 *_p50 *_p75 *_mean log_*_p25 log_*_p50 log_*_p75 log_*_mean"
 /* keep cz czname growth* log_growth* plan1947_length `pooled_gender' */
 keep cz czname growth* log_growth* plan1947_length `main_percentiles'
 
@@ -64,14 +64,16 @@ foreach name in `r(names)' {
 
 * boxplot of outcomes
 preserve
-foreach v of varlist kfr_*_pooled_* {
+foreach v of varlist kfr_*_pooled_p* {
     local race = substr("`v'", 5, 5)
     local pctile = substr("`v'", -3, 3)
     label variable `v' "`race' `pctile'"
 }
-graph hbox kfr_*_pooled_*, asyvars showyvars legend(off) ///
+graph hbox kfr_*_pooled_p* if kfr_natam_pooled_p75 < 100000 ///
+    , asyvars showyvars legend(off) ///
     title("Mean child hh income in 2015 by race" "and parent income pctile")
 graph export "$root/output/exploratory/sum_stat_kfr.png", replace
+sum kfr_natam_pooled_p75
 restore
 
 *** HIGHWAY GROWTH AND HIGHWAY PLAN ***
@@ -147,6 +149,8 @@ local logytitle: variable label log_kfr_pooled_pooled_mean
 * generate binscatters
 binscatter kfr_pooled_pooled_mean growth50to80, ///
     name(binscatter_kfr_growth) xtitle(`xtitle') ytitle(`ytitle')
+binscatter log_kfr_pooled_pooled_mean growth50to80, ///
+    name(binscatter_log_kfr_growth) xtitle(`xtitle') ytitle(`ytitle')
 binscatter kfr_pooled_pooled_mean log_growth50to80, ///
     name(binscatter_kfr_log_growth) xtitle(`xtitle') ytitle(`ytitle')
 binscatter log_kfr_pooled_pooled_mean log_growth50to80, ///
@@ -166,7 +170,7 @@ local genders "male female"
 foreach gender of local genders {
     local graphs ""
     foreach v of varlist log_kfr_*_`gender'_* {
-    binscatter `v' log_growth50to80, ///
+    binscatter `v' growth50to80, ///
         name(g_`v', replace) xtitle("") ytitle("") title(`v')
     local graphs "`graphs' g_`v'"
     }
