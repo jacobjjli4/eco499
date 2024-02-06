@@ -36,9 +36,10 @@ restore
 * changes in highway length from 1950 to 2000
 use "$root/data/derived/cz_kfr_growth50to00_dollars.dta", clear
 /* local pooled_gender = "log_kfr_*_pooled_* kfr_*_pooled_*" */
-local main_percentiles = "*_p25 *_p50 *_p75 *_mean log_*_p25 log_*_p50 log_*_p75 log_*_mean"
+local main_pctiles = "*_p25 *_p50 *_p75 *_mean log_*_p25 log_*_p50 log_*_p75 log_*_mean"
+local secondary_pctiles = "*_p1 *_p10 *_p100"
 /* keep cz czname growth* log_growth* plan1947_length `pooled_gender' */
-keep cz czname growth* log_growth* plan1947_length `main_percentiles'
+keep cz czname growth* log_growth* plan1947_length `main_pctiles' `secondary_pctiles'
 
 * summary statistics
 estpost sum growth50to80 log_growth50to80
@@ -181,8 +182,8 @@ foreach gender of local genders {
 }
 
 graph close
-graph display combine_by_race_male_pctile
-graph display combine_by_race_female_pctile
+graph display combine_by_race_male_pctile, xsize(10) ysize(15)
+graph display combine_by_race_female_pctile, xsize(10) ysize(15)
 
 graph export "$root/output/exploratory/combine_by_race_gender_pctile/combine_by_race_male_pctile.png", ///
     name(combine_by_race_male_pctile) replace
