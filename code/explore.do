@@ -11,11 +11,11 @@ set linesize 240
 
 global root = "/Users/jacobjjli/Library/CloudStorage/OneDrive-UniversityofToronto/Documents/School/1-5 ECO499/eco499/"
 
-use "$root/data/derived/cz_oa_allyrs.dta", clear
-gen l_lena = log(lena)
+use "$root/data/derived/cz_kfr_allyrs.dta", clear
+gen l_lenc = log(lenc)
 local pooled_gender = "kfr_*_pooled_*"
 local main_percentiles = "*p25 *p50 *p75"
-keep cz czname year lena l_lena plan1947_length `pooled_gender' `main_percentiles'
+keep cz czname year lenc l_lenc plan1947_length `pooled_gender' `main_percentiles'
 
 * lena - 2 digit (main) interstate highways
 * lenb - 3 digit (auxiliary) interstate highways
@@ -28,9 +28,9 @@ capture mkdir "$root/output/exploratory/tables/"
 
 * when were interstates constructed?
 preserve
-collapse (sum) lena, by(year)
-twoway line lena year
-graph export "$exploratory/highways_per_year.png", replace
+collapse (sum) lenc, by(year)
+twoway line lenc year
+graph export "$root/output/exploratory/highways_per_year.png", replace
 restore
 
 * changes in highway length from 1950 to 2000
