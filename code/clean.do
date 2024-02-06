@@ -10,7 +10,6 @@ clear all
 set linesize 240
 
 global root = "/Users/jacobjjli/Library/CloudStorage/OneDrive-UniversityofToronto/Documents/School/1-5 ECO499/eco499/"
-capture mkdir "$root/data/derived/"
 
 * CLEAN HIGHWAYS DATA **********************************************************
 use "$root/data/raw/hwy-allyr-cnty.dta", clear

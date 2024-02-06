@@ -11,6 +11,7 @@ set linesize 240
 global root = "/Users/jacobjjli/Library/CloudStorage/OneDrive-UniversityofToronto/Documents/School/1-5 ECO499/eco499/"
 
 * Merge and clean data
+capture mkdir "$root/data/derived/"
 do "$root/code/clean.do"
 do "$root/code/merge.do"
 do "$root/code/highway_growth.do"
