@@ -69,6 +69,11 @@ local vars = "cz czname kfr_pooled* kfr_natam* kfr_black* kfr_asian* kfr_white* 
 use `vars' using "$root/data/raw/cz_outcomes.dta", clear
 drop *_se *_n
 
+* Change order dataset for plotting
+order kfr*, sequential
+order kfr_pooled*, last
+order cz czname
+
 tostring cz, replace
 replace cz = "00" + cz if strlen(cz) == 3
 replace cz = "0" + cz if strlen(cz) == 4
