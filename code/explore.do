@@ -38,11 +38,11 @@ use "$root/data/derived/cz_kfr_growth50to00_dollars.dta", clear
 /* local pooled_gender = "log_kfr_*_pooled_* kfr_*_pooled_*" */
 local main_pctiles = "*_p25 *_p50 *_p75 *_mean log_*_p25 log_*_p50 log_*_p75 log_*_mean"
 local secondary_pctiles = "*_p1 *_p10 *_p100"
-/* keep cz czname growth* log_growth* plan1947_length `pooled_gender' */
-keep cz czname growth* log_growth* plan1947_length `main_pctiles' `secondary_pctiles'
+/* keep cz czname growth* asinh_growth* plan1947_length `pooled_gender' */
+keep cz czname growth* asinh_growth* plan1947_length `main_pctiles' `secondary_pctiles'
 
 * summary statistics
-estpost sum growth50to80 log_growth50to80
+estpost sum growth50to80 asinh_growth50to80
 eststo sum_stat_growth
 estpost sum kfr_natam*
 eststo sum_stat_natam
@@ -125,14 +125,14 @@ twoway (scatter log_kfr_pooled_pooled_mean growth50to80, msize(tiny)) ///
     name(scatter_log_kfr_growth_noLA) legend(off) ytitle(`logytitle')
 
 * same as above but logged growth
-twoway (scatter kfr_pooled_pooled_mean log_growth50to80, msize(tiny)) ///
-    (lfit kfr_pooled_pooled_mean log_growth50to80), ///
-    name(scatter_kfr_log_growth) legend(off) ytitle(`ytitle')
+twoway (scatter kfr_pooled_pooled_mean asinh_growth50to80, msize(tiny)) ///
+    (lfit kfr_pooled_pooled_mean asinh_growth50to80), ///
+    name(scatter_kfr_asinh_growth) legend(off) ytitle(`ytitle')
 
 * same as above but log log
-twoway (scatter log_kfr_pooled_pooled_mean log_growth50to80, msize(tiny)) ///
-    (lfit log_kfr_pooled_pooled_mean log_growth50to80), ///
-    name(scatter_log_kfr_log_growth) legend(off) ytitle(`logytitle')
+twoway (scatter log_kfr_pooled_pooled_mean asinh_growth50to80, msize(tiny)) ///
+    (lfit log_kfr_pooled_pooled_mean asinh_growth50to80), ///
+    name(scatter_log_kfr_asinh_growth) legend(off) ytitle(`logytitle')
 
 * export graphs
 graph dir
@@ -152,10 +152,10 @@ binscatter kfr_pooled_pooled_mean growth50to80, ///
     name(binscatter_kfr_growth) xtitle(`xtitle') ytitle(`ytitle')
 binscatter log_kfr_pooled_pooled_mean growth50to80, ///
     name(binscatter_log_kfr_growth) xtitle(`xtitle') ytitle(`ytitle')
-binscatter kfr_pooled_pooled_mean log_growth50to80, ///
-    name(binscatter_kfr_log_growth) xtitle(`xtitle') ytitle(`ytitle')
-binscatter log_kfr_pooled_pooled_mean log_growth50to80, ///
-    name(binscatter_log_kfr_log_growth) xtitle(`xtitle') ytitle(`ytitle')
+binscatter kfr_pooled_pooled_mean asinh_growth50to80, ///
+    name(binscatter_kfr_asinh_growth) xtitle(`xtitle') ytitle(`ytitle')
+binscatter log_kfr_pooled_pooled_mean asinh_growth50to80, ///
+    name(binscatter_log_kfr_asinh_growth) xtitle(`xtitle') ytitle(`ytitle')
 
 graph dir
 local mygraphs = r(list)
@@ -189,6 +189,34 @@ graph export "$root/output/exploratory/combine_by_race_gender_pctile/combine_by_
     name(combine_by_race_male_pctile) replace
 graph export "$root/output/exploratory/combine_by_race_gender_pctile/combine_by_race_female_pctile.png", ///
     name(combine_by_race_female_pctile) replace
+
+graph close
+graph drop *
+
+* Generate asinh combined graphs by race and income, by gender 
+
+local genders "male female"
+foreach gender of local genders {
+    local graphs ""
+    foreach v of varlist log_kfr_*_`gender'_* {
+    binscatter `v' asinh_growth50to80, ///
+        name(g_`v', replace) xtitle("") ytitle("") title(`v')
+    local graphs "`graphs' g_`v'"
+    }
+
+    graph combine `graphs', ycommon colfirst rows(6) cols(6) iscale(.25) ///
+        l1("Log of mean child household income in 2015 dollars") b1("Inverse hyperbolic sine of highway growth 1950-1980 (miles)") ///
+        name(asinh_race_`gender'_pctile, replace)
+}
+
+graph close
+graph display asinh_race_male_pctile, xsize(10) ysize(15)
+graph display asinh_race_female_pctile, xsize(10) ysize(15)
+
+graph export "$root/output/exploratory/combine_by_race_gender_pctile/asinh_combine_by_race_male_pctile.png", ///
+    name(asinh_race_male_pctil) replace
+graph export "$root/output/exploratory/combine_by_race_gender_pctile/asinh_combine_by_race_female_pctile.png", ///
+    name(asinh_race_female_pctil) replace
 
 graph close
 graph drop *

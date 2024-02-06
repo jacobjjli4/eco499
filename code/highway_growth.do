@@ -20,28 +20,31 @@ reshape wide lenc, i(cz) j(year)
 gen growth50to00 = lenc100 - lenc50
 gen growth50to80 = lenc80 - lenc50
 gen growth80to00 = lenc100 - lenc80
-gen log_growth50to00 = log(growth50to00)
-gen log_growth50to80 = log(growth50to80)
-gen log_growth80to00 = log(growth80to00)
+gen asinh_lenc50 = asinh(lenc50)
+gen asinh_lenc80 = asinh(lenc80)
+gen asinh_lenc100 = asinh(lenc100)
+gen asinh_growth50to00 = asinh_lenc100 - asinh_lenc50
+gen asinh_growth50to80 = asinh_lenc80 - asinh_lenc50
+gen asinh_growth80to00 = asinh_lenc100 - asinh_lenc80
 
 label variable growth50to00 "Highway growth 1950 to 2000 (miles)"
 label variable growth50to80 "Highway growth 1950 to 1980 (miles)"
 label variable growth80to00 "Highway growth 1980 to 2000 (miles)"
-label variable log_growth50to00 "Log of highway growth 1950 to 2000 (miles)"
-label variable log_growth50to80 "Log of highway growth 1950 to 1980 (miles)"
-label variable log_growth80to00 "Log of highway growth 1980 to 2000 (miles)"
+label variable asinh_growth50to00 "Inverse hyperbolic sine of highway growth 1950 to 2000 (miles)"
+label variable asinh_growth50to80 "Inverse hyperbolic sine of highway growth 1950 to 1980 (miles)"
+label variable asinh_growth80to00 "Inverse hyperbolic sine of highway growth 1980 to 2000 (miles)"
 
 drop lenc*
-order cz czname growth* log_growth* plan1947_length
+order cz czname growth* asinh_growth* plan1947_length
 
 * Bring in CZs with no highways
 merge 1:m cz using "$root/data/derived/cz_outcomes.dta"
 replace growth50to00 = 0 if _merge==2
 replace growth80to00 = 0 if _merge==2
 replace growth50to80 = 0 if _merge==2
-replace log_growth50to00 = 0 if _merge==2
-replace log_growth80to00 = 0 if _merge==2
-replace log_growth50to80 = 0 if _merge==2
+replace asinh_growth50to00 = 0 if _merge==2
+replace asinh_growth80to00 = 0 if _merge==2
+replace asinh_growth50to80 = 0 if _merge==2
 replace plan1947_length = 0 if plan1947_length==.
 drop _merge
 
