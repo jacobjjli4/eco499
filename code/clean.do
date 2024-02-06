@@ -62,6 +62,10 @@ collapse (sum) plan1947_length, by(cz)
 * convert metres to miles
 replace plan1947_length = plan1947_length / 1609.344
 
+* apply inverse hyperbolic sine transformation
+generate asinh_plan1947_length = asinh(plan1947_length)
+label variable asinh_plan1947_length "Inverse hyperbolic sine of miles of 1947 planned interstate"
+
 save "$root/data/derived/highways_cz_clean.dta", replace
 
 * CLEAN OA DATA ****************************************************************
