@@ -171,13 +171,13 @@ local genders "male female"
 foreach gender of local genders {
     local graphs ""
     foreach v of varlist log_kfr_*_`gender'_* {
-    binscatter `v' growth50to80, ///
+    binscatter `v' plan1947_length, ///
         name(g_`v', replace) xtitle("") ytitle("") title(`v')
     local graphs "`graphs' g_`v'"
     }
 
     graph combine `graphs', ycommon colfirst rows(3) cols(6) iscale(.25) ///
-        l1("Log of mean child household income in 2015 dollars") b1("Highway growth 1950-1980 (miles)") ///
+        l1("Log of mean child household income in 2015 dollars") b1("Miles of 1947 highway plan") ///
         name(combine_by_race_`gender'_pctile, replace)
 }
 
@@ -199,13 +199,13 @@ local genders "male female"
 foreach gender of local genders {
     local graphs ""
     foreach v of varlist log_kfr_*_`gender'_* {
-    binscatter `v' asinh_growth50to80, ///
+    binscatter `v' asinh_plan1947_length, ///
         name(g_`v', replace) xtitle("") ytitle("") title(`v')
     local graphs "`graphs' g_`v'"
     }
 
     graph combine `graphs', ycommon colfirst rows(6) cols(6) iscale(.25) ///
-        l1("Log of mean child household income in 2015 dollars") b1("Inverse hyperbolic sine of highway growth 1950-1980 (miles)") ///
+        l1("Log of mean child household income in 2015 dollars") b1("Inverse hyperbolic sine of miles of 1947 highway plan") ///
         name(asinh_race_`gender'_pctile, replace)
 }
 
@@ -214,9 +214,9 @@ graph display asinh_race_male_pctile, xsize(10) ysize(15)
 graph display asinh_race_female_pctile, xsize(10) ysize(15)
 
 graph export "$root/output/exploratory/combine_by_race_gender_pctile/asinh_combine_by_race_male_pctile.png", ///
-    name(asinh_race_male_pctil) replace
+    name(asinh_race_male_pctile) replace
 graph export "$root/output/exploratory/combine_by_race_gender_pctile/asinh_combine_by_race_female_pctile.png", ///
-    name(asinh_race_female_pctil) replace
+    name(asinh_race_female_pctile) replace
 
 graph close
 graph drop *
