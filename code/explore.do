@@ -10,10 +10,11 @@ clear all
 set linesize 240
 
 global root = "/Users/jacobjjli/Library/CloudStorage/OneDrive-UniversityofToronto/Documents/School/1-5 ECO499/eco499/"
+use "$root/data/derived/cz_kfr_growth50to00_dollars.dta", clear
 
 *** HIGHWAY GROWTH AND HIGHWAY PLAN ***
 * correlation between instrument and independent
-graph drop *
+capture graph drop *
 
 foreach v of varlist growth* {
     twoway (scatter `v' plan1947_length, msize(tiny)) ///
@@ -31,8 +32,8 @@ local mygraphs = r(list)
 foreach i of local mygraphs {
     graph export "$root/output/exploratory/plan_growth/`i'.png", name(`i') replace
 }
-graph close
-graph drop *
+capture graph close
+capture graph drop *
 
 local xtitle: variable label growth50to80
 local ytitle: variable label kfr_pooled_pooled_mean
@@ -74,8 +75,8 @@ local mygraphs = r(list)
 foreach i of local mygraphs {
     graph export "$root/output/exploratory/growth_outcomes/`i'.png", name(`i') replace
 }
-graph close
-graph drop *
+capture graph close
+capture graph drop *
 
 local xtitle: variable label growth50to80
 local ytitle: variable label kfr_pooled_pooled_mean
@@ -96,8 +97,8 @@ local mygraphs = r(list)
 foreach i of local mygraphs {
     graph export "$root/output/exploratory/growth_outcomes/`i'.png", name(`i') replace
 }
-graph close
-graph drop *
+capture graph close
+capture graph drop *
 
 * generate combined graphs by race and income, by gender 
 
@@ -115,7 +116,7 @@ foreach gender of local genders {
         name(combine_by_race_`gender'_pctile, replace)
 }
 
-graph close
+capture graph close
 graph display combine_by_race_male_pctile, xsize(10) ysize(15)
 graph display combine_by_race_female_pctile, xsize(10) ysize(15)
 
@@ -124,8 +125,8 @@ graph export "$root/output/exploratory/combine_by_race_gender_pctile/combine_by_
 graph export "$root/output/exploratory/combine_by_race_gender_pctile/combine_by_race_female_pctile.png", ///
     name(combine_by_race_female_pctile) replace
 
-graph close
-graph drop *
+capture graph close
+capture graph drop *
 
 * Generate asinh combined graphs by race and income, by gender 
 
@@ -143,7 +144,7 @@ foreach gender of local genders {
         name(asinh_race_`gender'_pctile, replace)
 }
 
-graph close
+capture graph close
 graph display asinh_race_male_pctile, xsize(10) ysize(15)
 graph display asinh_race_female_pctile, xsize(10) ysize(15)
 
@@ -152,5 +153,5 @@ graph export "$root/output/exploratory/combine_by_race_gender_pctile/asinh_combi
 graph export "$root/output/exploratory/combine_by_race_gender_pctile/asinh_combine_by_race_female_pctile.png", ///
     name(asinh_race_female_pctile) replace
 
-graph close
-graph drop *
+capture graph close
+capture graph drop *
