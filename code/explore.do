@@ -155,3 +155,27 @@ graph export "$root/output/exploratory/combine_by_race_gender_pctile/asinh_combi
 
 capture graph close
 capture graph drop *
+
+* OLS Regressions
+reg log_kfr_pooled_pooled_mean asinh_growth50to80
+reg log_kfr_white_pooled_mean asinh_growth50to80
+reg log_kfr_black_pooled_mean asinh_growth50to80
+reg log_kfr_asian_pooled_mean asinh_growth50to80
+reg log_kfr_natam_pooled_mean asinh_growth50to80
+reg log_kfr_hisp_pooled_mean asinh_growth50to80
+
+capture eststo drop *
+local races "pooled white black asian natam hisp"
+local pctiles = "mean p1 p10 p25 p50 p75 p100"
+foreach r of local races {
+    foreach p of local pctiles {
+        eststo ols_`r'_`p': reg kfr_`r'_pooled_`p' asinh_growth50to80, robust
+    }
+}
+
+foreach r of local races {
+    esttab ols_`r'_* using "$root/output/exploratory/tables/reg_`r'_`p'.tex", ///
+    booktabs replace mtitles
+}
+
+eststo dir
