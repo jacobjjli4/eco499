@@ -175,7 +175,8 @@ foreach r of local races {
 
 foreach r of local races {
     esttab ols_`r'_* using "$root/output/exploratory/tables/reg_`r'_`p'.tex", ///
-    booktabs replace mtitles
+    booktabs replace mtitles nonotes ///
+    star(* 0.10 ** 0.05 *** 0.01)
 }
 
 eststo dir
@@ -186,11 +187,20 @@ local races "pooled white black asian natam hisp"
 local pctiles = "mean p1 p10 p25 p50 p75 p100"
 foreach r of local races {
     foreach p of local pctiles {
-        eststo iv_`r'_`p': ivregress 2sls kfr_`r'_pooled_`p' (asinh_growth50to80 = plan1947_length), robust
+        eststo iv_`r'_`p': ivregress 2sls kfr_`r'_pooled_`p' (asinh_growth50to80 = asinh_plan1947_length), robust
     }
 }
 
 foreach r of local races {
     esttab iv_`r'_* using "$root/output/exploratory/tables/iv_`r'_`p'.tex", ///
-    booktabs replace mtitles
+    booktabs replace mtitles label nonotes ///
+    star(* 0.10 ** 0.05 *** 0.01)
 }
+
+* IV First stage
+capture eststo drop *
+eststo first_stage: reg asinh_growth50to00 asinh_plan1947_length, robust
+
+esttab first_stage using "$root/output/exploratory/tables/first_stage.tex", ///
+    booktabs replace mtitles label nonotes ///
+    star(* 0.10 ** 0.05 *** 0.01)
