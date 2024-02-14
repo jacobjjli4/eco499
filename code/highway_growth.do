@@ -27,14 +27,14 @@ gen asinh_growth50to00 = asinh_lenc100 - asinh_lenc50
 gen asinh_growth50to80 = asinh_lenc80 - asinh_lenc50
 gen asinh_growth80to00 = asinh_lenc100 - asinh_lenc80
 
-label variable growth50to00 "Highway growth 1950 to 2000 (miles)"
-label variable growth50to80 "Highway growth 1950 to 1980 (miles)"
-label variable growth80to00 "Highway growth 1980 to 2000 (miles)"
-label variable asinh_growth50to00 "Inverse hyperbolic sine of highway growth 1950 to 2000 (miles)"
-label variable asinh_growth50to80 "Inverse hyperbolic sine of highway growth 1950 to 1980 (miles)"
-label variable asinh_growth80to00 "Inverse hyperbolic sine of highway growth 1980 to 2000 (miles)"
+label variable growth50to00 "hwy growth 1950-2000"
+label variable growth50to80 "hwy growth 1950-1980"
+label variable growth80to00 "hwy growth 1980-2000"
+label variable asinh_growth50to00 "asinh(hwy growth 1950-2000)"
+label variable asinh_growth50to80 "asinh(hwy growth 1950-1980)"
+label variable asinh_growth80to00 "asinh(hwy growth 1980-2000)"
 
-drop lenc*
+drop asinh_lenc* lenc*
 order cz czname growth* asinh_growth* plan1947_length
 
 * Bring in CZs with no highways
@@ -46,6 +46,7 @@ replace asinh_growth50to00 = 0 if _merge==2
 replace asinh_growth80to00 = 0 if _merge==2
 replace asinh_growth50to80 = 0 if _merge==2
 replace plan1947_length = 0 if plan1947_length==.
+replace asinh_plan1947_length = asinh(plan1947_length)
 drop _merge
 
 save "$root/data/derived/cz_kfr_growth50to00.dta", replace
