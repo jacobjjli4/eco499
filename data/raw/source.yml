@@ -30,3 +30,8 @@ pctile_to_dollar_cw.dta:
     source: https://opportunityinsights.org/wp-content/uploads/2018/10/pctile_to_dollar_cw.dta
     description: "Crosswalk between income/wage percentiles and 2015 dollars"
     documentation: https://opportunityinsights.org/wp-content/uploads/2019/07/Codebook-for-Table-8.pdf
+
+eglp_cz_crosswalk_endyr_1990.csv:
+    obtained: 2024-02-14
+    source: fpeckert.me/eglp/Materials/Crosswalk%20Files/eglp_cz_crosswalk_endyr_1990.csv
+    description: "Crosswalk between 1790-2010 counties and 1990 commuting zones"
