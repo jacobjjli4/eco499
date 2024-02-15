@@ -9,5 +9,8 @@ data/derived/
 !data/raw/**/*/
 !data/raw/**/*.dvc
 
+# allow tracking of documentation
+!data/raw/documentation/*
+
 # results
 output/

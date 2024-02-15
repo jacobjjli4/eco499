@@ -1,0 +1,180 @@
+--------------------------------------------------------------------------------
+Codebook for NHGIS data file 'nhgis0004_ts_nominal_county'
+--------------------------------------------------------------------------------
+ 
+Contents
+    - Data Summary
+    - Data Dictionary
+    - Geographic Integration Methods
+    - Source Data
+    - Citation and Use
+ 
+Detailed notes on time series design and comparability are available at: 
+    https://www.nhgis.org/sites/www.nhgis.org/files/nhgis_time_series_tables.pdf 
+ 
+--------------------------------------------------------------------------------
+Data Summary
+--------------------------------------------------------------------------------
+ 
+Time series layout:     Time varies by column
+Geographic level:       County (by State)
+Geographic integration: Nominal
+Years:                  1900, 1910, 1920, 1930, 1940, 1950, 1960
+ 
+Tables:
+ 
+1. Total Population
+   Selected year(s): 1900, 1910, 1920, 1930, 1940, 1950, 1960
+   Code: A00
+ 
+--------------------------------------------------------------------------------
+Data Dictionary
+--------------------------------------------------------------------------------
+ 
+Context Fields 
+        GISJOIN:     GIS Join Match Code
+        STATE:       NHGIS Integrated State Name
+        STATEFP:     FIPS State Code
+        STATENH:     NHGIS Integrated State Code
+        COUNTY:      NHGIS Integrated County Name
+        COUNTYFP:    FIPS County Code
+        COUNTYNH:    NHGIS Integrated County Code
+ 
+Table 1: (A00) Total Population
+    Time series AA: Persons: Total
+        A00AA1900:   1900: Persons: Total
+        A00AA1910:   1910: Persons: Total
+        A00AA1920:   1920: Persons: Total
+        A00AA1930:   1930: Persons: Total
+        A00AA1940:   1940: Persons: Total
+        A00AA1950:   1950: Persons: Total
+        A00AA1960:   1960: Persons: Total
+ 
+--------------------------------------------------------------------------------
+Geographic Integration Methods
+--------------------------------------------------------------------------------
+ 
+Nominal Integration:
+
+    Nominally integrated tables link geographic units across time according to
+    their names and codes, disregarding any changes in unit boundaries. The
+    identified geographic units match those from each census source, so the
+    spatial definitions and total number of units may vary from one time to
+    another (e.g., a city may annex land, a tract may be split in two, a new
+    county may be created, etc.). The tables include data for a particular
+    geographic unit only at times when the unit's name or code was in use,
+    resulting in truncated time series for some areas.
+    
+    Users should be cautious when interpreting changes in nominally integrated
+    time series because a single unit code may refer to distinctly different
+    areas at different times. If you are uncertain whether any boundaries
+    changed in your areas of interest, we recommend inspecting NHGIS GIS files
+    to confirm. (NHGIS supplies GIS boundary files for all units and years in
+    nominally integrated time series *except* 1970 places and county
+    subdivisions.)
+    
+    Alternatively, for some topics and time periods, NHGIS provides
+    "geographically standardized" time series, which provide data from multiple
+    times for a single census's geographic units (e.g., 2000 and 2010 data for
+    2010 census units). A disadvantage of standardized time series is that, in
+    areas where source units do not nest perfectly within a unit of the standard
+    year (e.g., where a source 2000 unit intersects multiple 2010 units), NHGIS
+    applies interpolation to standardize the data, a process which may
+    occasionally produce substantial errors.
+
+Complete documentation on time series integration methods is available at:
+    https://www.nhgis.org/documentation/time-series
+ 
+--------------------------------------------------------------------------------
+Source Data
+--------------------------------------------------------------------------------
+ 
+Additional documentation on NHGIS data sources is available at:
+    https://www.nhgis.org/documentation/tabular-data
+
+Table 1: (A00) Total Population
+ 
+    Time series AA: Persons: Total
+        Year: 1900
+            Source dataset: 1900 Census: Population, Housing, Agriculture & Manufacturing Data [US, States & Counties]
+                Source table: NT1. Total Population
+                    Universe: Persons
+                        Variable: [AYM001] Total
+        Year: 1910
+            Source dataset: 1910 Census: Population, Housing & Agriculture Data [US, States & Counties]
+                Source table: NT1. Total Population by Year
+                    Universe: Persons
+                        Variable: [A3Y001] 1910
+        Year: 1920
+            Source dataset: 1920 Census: Population, Housing, Agriculture & Manufacturing Data [US, States & Counties]
+                Source table: NT1. Total Population
+                    Universe: Persons
+                        Variable: [A7L001] Total
+        Year: 1930
+            Source dataset: 1930 Census: Population, Agriculture & Economic Data [US, States & Counties]
+                Source table: NT1. Total Population
+                    Universe: Persons
+                        Variable: [BDP001] Total
+        Year: 1940
+            Source dataset: 1940 Census: Population, Housing, Agriculture & Economic Data [US, States & Counties]
+                Source table: NT1. Total Population
+                    Universe: Persons
+                        Variable: [BV7001] Total
+        Year: 1950
+            Source dataset: 1950 Census: Population, Housing & Agriculture Data [US, States & Counties]
+                Source table: NT1. Population
+                    Universe: Persons
+                        Variable: [B18001] Total
+        Year: 1960
+            Source dataset: 1960 Census: Population Data [US, States, Counties]
+                Source table: NT1. Total Population
+                    Universe: Persons
+                        Variable: [B5O001] Total
+ 
+--------------------------------------------------------------------------------
+Citation and Use of NHGIS Data
+--------------------------------------------------------------------------------
+ 
+All persons are granted a limited license to use this documentation and the
+accompanying data, subject to the following conditions:
+
+* REDISTRIBUTION: You will not redistribute the data without permission.
+
+  You may publish a subset of the data to meet journal requirements for accessing 
+  data related to a particular publication. Contact us for permission for any other 
+  redistribution; we will consider requests for free and commercial redistribution.
+
+* CITATION: You will cite NHGIS appropriately.
+
+    * Publications and research reports employing NHGIS data (either tabular or GIS) 
+      should include the following citation:
+
+        Steven Manson, Jonathan Schroeder, David Van Riper, Katherine Knowles, Tracy Kugler, Finn Roberts, and Steven Ruggles.
+        IPUMS National Historical Geographic Information System: Version 18.0 
+        [dataset]. Minneapolis, MN: IPUMS. 2023.
+        http://doi.org/10.18128/D050.V18.0
+
+    * For policy briefs, online resources, or articles in the popular press, we 
+      recommend that you cite the use of NHGIS data as follows:
+
+        IPUMS NHGIS, University of Minnesota, www.nhgis.org.
+
+These terms of use are a legally binding agreement. You can use the data only in 
+accordance with these terms, and any other use is a violation of the agreement. 
+Violations may result in revocation of the agreement and prohibition from using other 
+IPUMS data. If IPUMS or our partners are harmed from your violation, you are 
+responsible for all damages, including reasonable attorney's fees and expenses.
+        
+In addition, we request that users send us a copy of any publications, research
+reports, or educational material making use of the data or documentation.
+
+Send electronic material to: nhgis@umn.edu
+
+Printed matter should be sent to:
+
+    IPUMS NHGIS
+    Institute for Social Research and Data Innovation
+    University of Minnesota
+    50 Willey Hall
+    225 19th Ave S
+    Minneapolis, MN 55455
