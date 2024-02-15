@@ -1,0 +1,5 @@
+outs:
+- md5: 85074226a84ba9dbadfa8dde5e43f47a
+  size: 568051
+  hash: md5
+  path: ts_nominal_county.dat
