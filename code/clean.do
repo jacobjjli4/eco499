@@ -77,6 +77,11 @@ order kfr*, sequential
 order kfr_pooled*, last
 order cz czname
 
+* Drop CZs in Alaska or Hawaii
+drop if (cz >= 34101)&(cz <= 34115) 
+drop if (cz >= 34701)&(cz <= 34703)
+drop if cz == 35600
+
 tostring cz, replace
 replace cz = "00" + cz if strlen(cz) == 3
 replace cz = "0" + cz if strlen(cz) == 4
