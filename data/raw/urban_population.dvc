@@ -1,0 +1,6 @@
+outs:
+- md5: c70083283f7621043030dddbfb0125c3.dir
+  size: 2723618
+  nfiles: 6
+  hash: md5
+  path: urban_population

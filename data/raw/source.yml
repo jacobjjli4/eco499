@@ -40,3 +40,8 @@ ts_nominal_county.dat:
     obtained: 2024-02-14
     source: "IPUMS NHGIS Table 1: (A00) Total Population"
     description: "Time series of NHGIS population for decennial years 1900-1960 at the county level."
+
+urban_population:
+    obtained: 2024-02-024
+    source: "IPUMS NHGIS 1910, 1920, 1930, 1940, 1950 Census Table NT2. Total Urban population"
+    description: "Tables containing urban population at the county level for 1910-1950."
