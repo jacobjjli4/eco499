@@ -3,7 +3,7 @@ Title:          Master build file
 Author:			Jia Jun (Jacob) Li
 Contact:		li.jiajun@hotmail.com
 Date Created:	January 24, 2024
-Date Modified:	Jan 24, 2024
+Date Modified:	February 24, 2024
 *******************************************************************************/
 
 clear all
@@ -16,6 +16,14 @@ do "$root/code/clean.do"
 do "$root/code/merge.do"
 do "$root/code/highway_growth.do"
 do "$root/code/pctiles_to_dollar.do"
+
+* Make covariates
+capture mkdir "$root/data/derived/covariates/"
+do "$root/code/covariates/cnty_cz_crosswalk.do"
+do "$root/code/covariates/population_cz.do"
+
+* Merge covariates into master data
+
 
 * Analysis
 capture mkdir "$root/output/exploratory/"
