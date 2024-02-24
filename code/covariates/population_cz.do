@@ -1,5 +1,5 @@
 /*******************************************************************************
-Title:          Generate population at county level
+Title:          Load population data at county level and merge at CZ level
 Author:         Jia Jun (Jacob) Li
 Contact:        li.jiajun@hotmail.com
 Date Created:   February 14, 2024
