@@ -34,4 +34,7 @@ merge 1:m year statenh countynh using ///
 
 collapse (sum) urban_population [iw = weight], by(cz year)
 
+* reshape urban population to wide to use as regression covariates
+reshape wide urban_population, i(cz) j(year)
+
 save "$root/data/derived/covariates/urban_population.dta", replace

@@ -79,4 +79,7 @@ recast long a00aa
 rename a00aa population
 label variable population ""
 
+* reshape population to wide to use as regression covariates
+reshape wide population, i(cz) j(year)
+
 save "$root/data/derived/covariates/population_1900_1950_cz.dta", replace
