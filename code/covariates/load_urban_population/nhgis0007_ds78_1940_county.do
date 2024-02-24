@@ -29,4 +29,4 @@ label var stateicp  `"ICPSR State Code"'
 label var countyicp `"ICPSR County Code"'
 label var bw1001    `"Total"'
 
-
+rename bw1001 urban_population

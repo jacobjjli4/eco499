@@ -32,4 +32,5 @@ label var countyicp `"ICPSR County Code"'
 label var a7t001    `"Urban"'
 label var a7t002    `"Rural"'
 
-
+rename a7t001 urban_population
+drop a7t002

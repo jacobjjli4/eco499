@@ -19,4 +19,19 @@ foreach file of local files {
 }
 erase "$root/data/temp/urban_population.dta"
 
-*
+* Data cleaning
+drop if urban_population == .
+drop if urban_population == 0
+
+* Crosswalk to CZ level
+rename statea statenh
+rename countya countynh
+destring(year), replace
+
+merge 1:m year statenh countynh using ///
+    "$root/data/derived/covariates/cnty_cz_crosswalk.dta", /// 
+    assert(match using) keep(match) nogenerate
+
+collapse (sum) urban_population [iw = weight], by(cz year)
+
+save "$root/data/derived/covariates/urban_population.dta", replace
