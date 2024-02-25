@@ -22,4 +22,7 @@ foreach v of varlist urban_population* {
 }
 drop _merge
 
+merge 1:1 cz using "$root/data/derived/covariates/unemployment_1950_cz.dta", ///
+    assert(match) nogenerate
+
 save "$root/data/derived/cz_kfr_growth50to00_dollars_covariates.dta", replace
