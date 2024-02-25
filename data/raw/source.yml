@@ -42,6 +42,12 @@ ts_nominal_county.dat:
     description: "Time series of NHGIS population for decennial years 1900-1960 at the county level."
 
 urban_population:
-    obtained: 2024-02-024
+    obtained: 2024-02-24
     source: "IPUMS NHGIS 1910, 1920, 1930, 1940, 1950 Census Table NT2. Total Urban population"
     description: "Tables containing urban population at the county level for 1910-1950."
+
+covariates/employment_1950_cnty.dat:
+    obtained: 2024-02-25
+    source: "IPUMS NHGIS 1950 Census Tables NT28 (Population 14 Years of Age and Over in the Labor Force by Sex) and NT30 (Population 14 Years of Age and Over by Employment Status by Sex). "
+    description: "Unemployment and labour force data for 1950 counties. I do not use Table NT28; I instead use Table NT30 to get the labour force by adding unemployed and employed persons. This is because NT28 includes military employment but NT30 only includes civilian employment."
+    documentation: "documentation?employment_1950_cnty.txt"
