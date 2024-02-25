@@ -50,4 +50,11 @@ covariates/employment_1950_cnty.dat:
     obtained: 2024-02-25
     source: "IPUMS NHGIS 1950 Census Tables NT28 (Population 14 Years of Age and Over in the Labor Force by Sex) and NT30 (Population 14 Years of Age and Over by Employment Status by Sex). "
     description: "Unemployment and labour force data for 1950 counties. I do not use Table NT28; I instead use Table NT30 to get the labour force by adding unemployed and employed persons. This is because NT28 includes military employment but NT30 only includes civilian employment."
-    documentation: "documentation?employment_1950_cnty.txt"
+    documentation: "documentation/employment_1950_cnty.txt"
+
+covariates/education_1950_cnty.dat:
+    obtained: 2024-02-25
+    source: "IPUMS NHGIS 1950 Census Table NT40 (Median School Years of Population 25 Years of Age and Over)"
+    description: "Education data for 1950 counties"
+    documentation: "documentation/education_1950_cnty.txt"
+
