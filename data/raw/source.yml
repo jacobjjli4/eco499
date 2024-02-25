@@ -58,3 +58,8 @@ covariates/education_1950_cnty.dat:
     description: "Education data for 1950 counties"
     documentation: "documentation/education_1950_cnty.txt"
 
+covariates/income_1950_cnty.dat:
+    obtained: 2024-02-25
+    source: "IPUMS NHGIS 1950 Census Table NT39 (Median Family Income (1949) of Families)"
+    description: "Income data for 1950 counties"
+    documentation: "documentation/income_1950_cnty.txt"

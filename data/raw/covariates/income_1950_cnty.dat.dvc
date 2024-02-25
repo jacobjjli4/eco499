@@ -1,0 +1,5 @@
+outs:
+- md5: e0a3534f67c53eb0232df6d89c277a9c
+  size: 566384
+  hash: md5
+  path: income_1950_cnty.dat
