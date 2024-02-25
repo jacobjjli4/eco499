@@ -22,6 +22,7 @@ capture mkdir "$root/data/derived/covariates/"
 do "$root/code/covariates/cnty_cz_crosswalk.do"
 do "$root/code/covariates/population_cz.do"
 do "$root/code/covariates/employment_cz.do"
+do "$root/code/covariates/education_cz.do"
 
 * Merge covariates into master data
 do "$root/code/merge_covariates.do"
