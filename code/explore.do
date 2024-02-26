@@ -207,11 +207,8 @@ esttab first_stage using "$root/output/exploratory/tables/first_stage.tex", ///
 
 * OLS Regressions on pooled data adding covariates
 capture eststo drop *
-foreach v of varlist l_pop* {
-    cap gen `v'_2 = `v'^2
-}
+
 local l_pop "l_population_1900 l_population_1910 l_population_1920 l_population_1930 l_population_1940 l_population_1950"
-local l_pop2 "l_population_1900_2 l_population_1910_2 l_population_1920_2 l_population_1930_2 l_population_1940_2 l_population_1950_2"
 local pct_urb "pct_urb_1910 pct_urb_1920 pct_urb_1930 pct_urb_1940 pct_urb_1950"
 eststo ols_1: reg log_kfr_pooled_pooled_mean asinh_growth50to00, robust
 eststo ols_2: reg log_kfr_pooled_pooled_mean asinh_growth50to00 `l_pop', robust
@@ -225,7 +222,6 @@ eststo iv_2: ivregress 2sls log_kfr_pooled_pooled_mean (asinh_growth50to00 = asi
 eststo iv_3: ivregress 2sls log_kfr_pooled_pooled_mean (asinh_growth50to00 = asinh_plan1947_length) `l_pop' `pct_urb', robust
 eststo iv_4: ivregress 2sls log_kfr_pooled_pooled_mean (asinh_growth50to00 = asinh_plan1947_length) `l_pop' `pct_urb' unemp_rate med_educ_yrs med_income, robust
 eststo iv_5: ivregress 2sls log_kfr_pooled_pooled_mean (asinh_growth50to00 = asinh_plan1947_length) `l_pop' `pct_urb' unemp_rate med_educ_yrs med_income i.cen_div, robust
-eststo iv_6: ivregress 2sls log_kfr_pooled_pooled_mean (asinh_growth50to00 = asinh_plan1947_length) `l_pop' `l_pop2' `pct_urb' unemp_rate med_educ_yrs med_income i.cen_div, robust
 
 * Check first stage
 reg asinh_growth50to00 asinh_plan1947_length `l_pop' `l_urban_pop' unemp_rate med_educ_yrs med_income, robust
