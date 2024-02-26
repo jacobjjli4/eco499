@@ -48,4 +48,9 @@ tostring cz, replace
 replace cz = "00" + cz if strlen(cz) == 3
 replace cz = "0" + cz if strlen(cz) == 4
 
+* Label variables
+forvalues year = 1910(10)1950 {
+    label variable urb_pop_`year' "`year' urban population"
+}
+
 save "$root/data/derived/covariates/urban_population_1910_1950_cz.dta", replace

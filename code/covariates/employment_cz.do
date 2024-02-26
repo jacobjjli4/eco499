@@ -68,12 +68,15 @@ gen lab_force = b2r001 + b2r002 + b2u003 + b2u004
 gen unemployed = b2u003 + b2u004
 
 collapse (sum) lab_force unemployed [iw = weight], by(cz year)
-gen unemployment_rate_1950 = unemployed / lab_force
+gen unemp_rate = unemployed / lab_force
 drop unemployed lab_force year
 
 * Recast CZ as str for merging with master dataset
 tostring cz, replace
 replace cz = "00" + cz if strlen(cz) == 3
 replace cz = "0" + cz if strlen(cz) == 4
+
+* Label variable
+label variable unemp_rate "1950 unemployment rate" 
 
 save "$root/data/derived/covariates/unemployment_1950_cz.dta", replace

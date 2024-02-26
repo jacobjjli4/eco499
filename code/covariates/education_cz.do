@@ -58,11 +58,14 @@ merge 1:m year statenh countynh using ///
     assert(match using) keep(match) nogenerate
 
 collapse (mean) med_educ_yrs [iw = weight], by(cz year)
-label variable med_educ_yrs "Median years of education"
+label variable med_educ_yrs "1950 median years of education"
 
 * Recast CZ as str for merging with master dataset
 tostring cz, replace
 replace cz = "00" + cz if strlen(cz) == 3
 replace cz = "0" + cz if strlen(cz) == 4
+
+* Drop year (all years are 1950)
+drop year
 
 save "$root/data/derived/covariates/education_1950_cz.dta", replace
