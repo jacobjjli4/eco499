@@ -3,7 +3,7 @@ Description:    Merge covariates into master dataset
 Author:		    Jia Jun (Jacob) Li
 Contact:		li.jiajun@hotmail.com
 Date Created:	February 24, 2024
-Date Modified:	February 24, 2024
+Date Modified:	February 26, 2024
 *******************************************************************************/
 clear all
 set linesize 240
@@ -31,7 +31,9 @@ merge 1:1 cz using "$root/data/derived/covariates/education_1950_cz.dta", ///
 merge 1:1 cz using "$root/data/derived/covariates/income_1950_cz.dta", ///
     assert(match) nogenerate
 
+merge 1:1 cz using "$root/data/derived/covariates/census_division.dta",
+
 * reorder covariates to before dependent variables
-order population1910-med_income, before(kfr_asian_female_mean)
+order population1900-cen_div, before(kfr_asian_female_mean)
 
 save "$root/data/derived/cz_kfr_growth50to00_dollars_covariates.dta", replace
