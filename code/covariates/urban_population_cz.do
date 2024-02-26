@@ -34,8 +34,14 @@ merge 1:m year statenh countynh using ///
 
 collapse (sum) urban_population [iw = weight], by(cz year)
 
+* Impute missing urban population as 0
+foreach v of varlist urban_pop* {
+    replace `v' = 0 if `v' == .
+}
+
 * reshape urban population to wide to use as regression covariates
-reshape wide urban_population, i(cz) j(year)
+rename urban_population urb_pop_
+reshape wide urb_pop_, i(cz) j(year)
 
 * recast CZ to str for merging with master dataset
 tostring cz, replace
