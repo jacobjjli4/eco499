@@ -76,11 +76,21 @@ collapse (sum) a00aa [iw = weight], by(cz year)
 * clean up the data format for file size
 replace a00aa = round(a00aa)
 recast long a00aa
-rename a00aa population
+rename a00aa population_
 label variable population ""
 
 * reshape population to wide to use as regression covariates
 reshape wide population, i(cz) j(year)
+
+* Generate logged population and label variables
+foreach v of varlist population* {
+    gen l_`v' = log(`v')
+}
+
+forvalues year = 1900(10)1950 {
+    label variable population_`year' "`year' population"
+    label variable l_population_`year' "ln(`year' population)"
+}
 
 * Recast CZ as str for merging with master dataset
 tostring cz, replace
