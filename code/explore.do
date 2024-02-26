@@ -3,14 +3,14 @@ Title:			Exploratory Data Analysis for Long-Run Highway Impacts
 Author:			Jia Jun (Jacob) Li
 Contact:		li.jiajun@hotmail.com
 Date Created:	January 6, 2024
-Date Modified:	Feb 6, 2024
+Date Modified:	February 26, 2024
 *******************************************************************************/
 
 clear all
 set linesize 240
 
 global root = "/Users/jacobjjli/Library/CloudStorage/OneDrive-UniversityofToronto/Documents/School/1-5 ECO499/eco499/"
-use "$root/data/derived/cz_kfr_growth50to00_dollars.dta", clear
+use "$root/data/derived/cz_kfr_growth50to00_dollars_covariates.dta", clear
 
 *** HIGHWAY GROWTH AND HIGHWAY PLAN ***
 * correlation between instrument and independent
@@ -203,4 +203,40 @@ eststo first_stage: reg asinh_growth50to00 asinh_plan1947_length, robust
 
 esttab first_stage using "$root/output/exploratory/tables/first_stage.tex", ///
     booktabs replace mtitles label nonotes ///
+    star(* 0.10 ** 0.05 *** 0.01)
+
+* OLS Regressions on pooled data adding covariates
+foreach v of varlist population*{
+    gen l_`v' = log(`v')
+}
+foreach v of varlist urb_pop*{
+    gen l_`v' = log(`v')
+}
+
+local l_pop "l_population1910 l_population1920 l_population1930 l_population1940 l_population1950"
+local l_urb_pop "l_urb_pop_1910 l_urb_pop_1920 l_urb_pop_1930 l_urb_pop_1940 l_urb_pop_1950"
+local pop "population1910 population1920 population1930 population1940 population1950"
+local urb_pop "urb_pop_1910 urb_pop_1920 urb_pop_1930 urb_pop_1940 urb_pop_1950"
+eststo ols_1: reg log_kfr_pooled_pooled_mean asinh_growth50to00, robust
+eststo ols_2: reg log_kfr_pooled_pooled_mean asinh_growth50to00 `pop', robust
+eststo ols_2l: reg log_kfr_pooled_pooled_mean asinh_growth50to00 `l_pop', robust
+eststo ols_3: reg log_kfr_pooled_pooled_mean asinh_growth50to00 `pop' `urb_pop', robust
+eststo ols_3l: reg log_kfr_pooled_pooled_mean asinh_growth50to00 `l_pop' `l_urb_pop', robust
+eststo ols_4: reg log_kfr_pooled_pooled_mean asinh_growth50to00 `l_pop' `l_urb_pop' unemp_rate med_income med_educ_yrs, robust
+
+esttab ols* using "$root/output/exploratory/tables/ols_cov.tex", ///
+    booktabs replace label nonotes mtitles ///
+    star(* 0.10 ** 0.05 *** 0.01)
+
+* IV Regressions on pooled data adding covariates
+eststo iv_1: ivregress 2sls log_kfr_pooled_pooled_mean (asinh_growth50to00 = asinh_plan1947_length), robust
+eststo iv_2: ivregress 2sls log_kfr_pooled_pooled_mean (asinh_growth50to00 = asinh_plan1947_length) `pop', robust
+eststo iv_3: ivregress 2sls log_kfr_pooled_pooled_mean (asinh_growth50to00 = asinh_plan1947_length) `pop' `urb_pop', robust
+eststo iv_4: ivregress 2sls log_kfr_pooled_pooled_mean (asinh_growth50to00 = asinh_plan1947_length) `l_pop' `l_urb_pop' unemp_rate med_educ_yrs med_income, robust
+
+* Check first stage
+reg asinh_growth50to00 asinh_plan1947_length `l_pop' `l_urban_pop' unemp_rate med_educ_yrs med_income, robust
+
+esttab iv* using "$root/output/exploratory/tables/iv_cov.tex", ///
+    booktabs replace label nonotes nomtitles ///
     star(* 0.10 ** 0.05 *** 0.01)
