@@ -16,25 +16,32 @@ local l_pop "l_population_1900 l_population_1910 l_population_1920 l_population_
 local pct_urb "pct_urb_1910 pct_urb_1920 pct_urb_1930 pct_urb_1940 pct_urb_1950"
 local pctiles "mean p1 p25 p50 p75 p100"
 
+* IV first stage
+label variable asinh_plan1947_length "asinh(1947 planned interstate)"
+eststo first_stage: reg asinh_growth50to80 asinh_plan1947_length `l_pop' `pct_urb' unemp_rate med_educ_yrs med_income i.cen_div, robust
+
+esttab first_stage using "$root/output/exploratory/tables/first_stage.tex", ///
+    booktabs replace label ///
+    stats(r2_a N F, label("Adj. R-squared" "N" "F-statistic")) ///
+    keep(asinh* unemp_rate med_educ_yrs med_income) ///
+    star(* 0.10 ** 0.05 *** 0.01)
+
 * detailed regressions by different income percentile
 foreach pctile of local pctiles {
     * OLS Regressions on pooled data adding covariates
     capture eststo drop *
-    eststo ols_1: reg log_kfr_pooled_pooled_`pctile' asinh_growth50to00, robust
-    eststo ols_2: reg log_kfr_pooled_pooled_`pctile' asinh_growth50to00 `l_pop', robust
-    eststo ols_3: reg log_kfr_pooled_pooled_`pctile' asinh_growth50to00 `l_pop' `pct_urb', robust
-    eststo ols_4: reg log_kfr_pooled_pooled_`pctile' asinh_growth50to00 `l_pop' `pct_urb' unemp_rate med_income med_educ_yrs, robust
-    eststo ols_5: reg log_kfr_pooled_pooled_`pctile' asinh_growth50to00 `l_pop' `pct_urb' unemp_rate med_income med_educ_yrs i.cen_div, robust
+    eststo ols_1: reg log_kfr_pooled_pooled_`pctile' asinh_growth50to80, robust
+    eststo ols_2: reg log_kfr_pooled_pooled_`pctile' asinh_growth50to80 `l_pop', robust
+    eststo ols_3: reg log_kfr_pooled_pooled_`pctile' asinh_growth50to80 `l_pop' `pct_urb', robust
+    eststo ols_4: reg log_kfr_pooled_pooled_`pctile' asinh_growth50to80 `l_pop' `pct_urb' unemp_rate med_income med_educ_yrs, robust
+    eststo ols_5: reg log_kfr_pooled_pooled_`pctile' asinh_growth50to80 `l_pop' `pct_urb' unemp_rate med_income med_educ_yrs i.cen_div, robust
 
     * IV Regressions on pooled data adding covariates
-    eststo iv_1: ivregress 2sls log_kfr_pooled_pooled_`pctile' (asinh_growth50to00 = asinh_plan1947_length), robust
-    eststo iv_2: ivregress 2sls log_kfr_pooled_pooled_`pctile' (asinh_growth50to00 = asinh_plan1947_length) `l_pop', robust
-    eststo iv_3: ivregress 2sls log_kfr_pooled_pooled_`pctile' (asinh_growth50to00 = asinh_plan1947_length) `l_pop' `pct_urb', robust
-    eststo iv_4: ivregress 2sls log_kfr_pooled_pooled_`pctile' (asinh_growth50to00 = asinh_plan1947_length) `l_pop' `pct_urb' unemp_rate med_educ_yrs med_income, robust
-    eststo iv_5: ivregress 2sls log_kfr_pooled_pooled_`pctile' (asinh_growth50to00 = asinh_plan1947_length) `l_pop' `pct_urb' unemp_rate med_educ_yrs med_income i.cen_div, robust
-
-    * Check first stage
-    reg asinh_growth50to00 asinh_plan1947_length `l_pop' `l_urban_pop' unemp_rate med_educ_yrs med_income, robust
+    eststo iv_1: ivregress 2sls log_kfr_pooled_pooled_`pctile' (asinh_growth50to80 = asinh_plan1947_length), robust
+    eststo iv_2: ivregress 2sls log_kfr_pooled_pooled_`pctile' (asinh_growth50to80 = asinh_plan1947_length) `l_pop', robust
+    eststo iv_3: ivregress 2sls log_kfr_pooled_pooled_`pctile' (asinh_growth50to80 = asinh_plan1947_length) `l_pop' `pct_urb', robust
+    eststo iv_4: ivregress 2sls log_kfr_pooled_pooled_`pctile' (asinh_growth50to80 = asinh_plan1947_length) `l_pop' `pct_urb' unemp_rate med_educ_yrs med_income, robust
+    eststo iv_5: ivregress 2sls log_kfr_pooled_pooled_`pctile' (asinh_growth50to80 = asinh_plan1947_length) `l_pop' `pct_urb' unemp_rate med_educ_yrs med_income i.cen_div, robust
 
     * Export regressions
     estadd local population "Y": ols_2 ols_3 ols_4 ols_5 iv_2 iv_3 iv_4 iv_5
@@ -69,12 +76,12 @@ foreach pctile of local pctiles {
 local races "pooled white black asian hisp natam"
 foreach race of local races {
     capture eststo drop *
-    eststo iv_`race'_mean: ivregress 2sls log_kfr_`race'_pooled_mean (asinh_growth50to00 = asinh_plan1947_length) `l_pop' `pct_urb' unemp_rate med_educ_yrs med_income i.cen_div, robust
-    eststo iv_`race'_p1: ivregress 2sls log_kfr_`race'_pooled_p1 (asinh_growth50to00 = asinh_plan1947_length) `l_pop' `pct_urb' unemp_rate med_educ_yrs med_income i.cen_div, robust
-    eststo iv_`race'_p25: ivregress 2sls log_kfr_`race'_pooled_p25 (asinh_growth50to00 = asinh_plan1947_length) `l_pop' `pct_urb' unemp_rate med_educ_yrs med_income i.cen_div, robust
-    eststo iv_`race'_p50: ivregress 2sls log_kfr_`race'_pooled_p50 (asinh_growth50to00 = asinh_plan1947_length) `l_pop' `pct_urb' unemp_rate med_educ_yrs med_income i.cen_div, robust
-    eststo iv_`race'_p75: ivregress 2sls log_kfr_`race'_pooled_p75 (asinh_growth50to00 = asinh_plan1947_length) `l_pop' `pct_urb' unemp_rate med_educ_yrs med_income i.cen_div, robust
-    eststo iv_`race'_p100: ivregress 2sls log_kfr_`race'_pooled_p100 (asinh_growth50to00 = asinh_plan1947_length) `l_pop' `pct_urb' unemp_rate med_educ_yrs med_income i.cen_div, robust
+    eststo iv_`race'_mean: ivregress 2sls log_kfr_`race'_pooled_mean (asinh_growth50to80 = asinh_plan1947_length) `l_pop' `pct_urb' unemp_rate med_educ_yrs med_income i.cen_div, robust
+    eststo iv_`race'_p1: ivregress 2sls log_kfr_`race'_pooled_p1 (asinh_growth50to80 = asinh_plan1947_length) `l_pop' `pct_urb' unemp_rate med_educ_yrs med_income i.cen_div, robust
+    eststo iv_`race'_p25: ivregress 2sls log_kfr_`race'_pooled_p25 (asinh_growth50to80 = asinh_plan1947_length) `l_pop' `pct_urb' unemp_rate med_educ_yrs med_income i.cen_div, robust
+    eststo iv_`race'_p50: ivregress 2sls log_kfr_`race'_pooled_p50 (asinh_growth50to80 = asinh_plan1947_length) `l_pop' `pct_urb' unemp_rate med_educ_yrs med_income i.cen_div, robust
+    eststo iv_`race'_p75: ivregress 2sls log_kfr_`race'_pooled_p75 (asinh_growth50to80 = asinh_plan1947_length) `l_pop' `pct_urb' unemp_rate med_educ_yrs med_income i.cen_div, robust
+    eststo iv_`race'_p100: ivregress 2sls log_kfr_`race'_pooled_p100 (asinh_growth50to80 = asinh_plan1947_length) `l_pop' `pct_urb' unemp_rate med_educ_yrs med_income i.cen_div, robust
 
     estadd local population "Y": iv*
     estadd local percent_urban "Y": iv*
