@@ -3,6 +3,7 @@
 # data files
 data/raw/**/*
 data/derived/
+data/temp/
 
 # allow tracking of .dvc files
 !data/raw/*.dvc
