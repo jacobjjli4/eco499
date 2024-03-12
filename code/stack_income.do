@@ -30,10 +30,10 @@ rename kfr_black_pooled_p kfrblack
 rename kfr_pooled_pooled_p kfrpooled
 
 * Stack models on race
-reshape long kfr log_kfr, i(cz parent_income) j(race) string
-
-* Tests
-count if (race=="black")&(kfr==.)
+reshape long kfr log_kfr, i(cz parent_income) j(race2) string
+label define races 1 "white" 2 "black" 3 "pooled"
+encode race2, label(races) gen(race)
+drop race2
 
 * Dataset management
 label variable parent_income "Parent income pctile"
