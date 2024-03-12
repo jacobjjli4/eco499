@@ -29,6 +29,9 @@ do "$root/code/covariates/census_division_cz.do"
 * Merge covariates into master data
 do "$root/code/merge_covariates.do"
 
+* Stack data on income
+do "$root/code/stack_income.do"
+
 * Analysis
 capture mkdir "$root/output/exploratory/"
 capture mkdir "$root/output/exploratory/plan_growth/"
