@@ -40,6 +40,12 @@ local socioeco
 local cen_div
     "i.parent_income#i.cen_div";
 
+ivregress 2sls
+    log_kfr (asinh_growth50to80 = asinh_plan1947_length) 
+    `l_pop' `pct_urb' `socioeco' `cen_div'
+    i.parent_income i.parent_income#c.asinh_growth50to80 c.asinh_growth50to80#c.asinh_growth50to80 i.parent_income#c.asinh_growth50to80#c.asinh_growth50to80
+    if race==3, robust;
+
 eststo iv_stack_pool: ivregress 2sls 
     log_kfr (asinh_growth50to80 = asinh_plan1947_length) 
     `l_pop' `pct_urb' `socioeco' `cen_div' 
